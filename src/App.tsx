@@ -1,14 +1,17 @@
-import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import styled from 'styled-components';
+import Main from './components/Main';
+
+const AppBlock = styled.div`
+  width: 100dvw;
+  height: 100dvh;
+`;
 
 function App() {
-  return <div className='App'>
-<Routes>
-  <Route path='/game' element={<div>게임 로비</div>}/>
-  <Route path='/room/:id' element={<div></div>}/>
-</Routes>
-
-  </div>;
+  return (
+    <AppBlock className='App'>
+      <Main />
+    </AppBlock>
+  );
 }
 
 export default App;
