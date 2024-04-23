@@ -2,6 +2,7 @@ import styled, { keyframes } from 'styled-components';
 import { FlexLayout } from '../../styles/layout';
 import { RegularText } from '../../styles/fonts';
 import Input from '../../components/Input';
+import RoundButton from '../../components/RoundButton';
 
 import main1 from '../../assets/img-main1.png';
 
@@ -36,6 +37,7 @@ export default function StartPage() {
         <BlinkRegularText>시작하려면 닉네임을 입력하세요</BlinkRegularText>
       </FlexLayout>
       <Input width='44rem' />
+      <RoundButton label={'게임 시작'} />
     </Background>
   );
 }
