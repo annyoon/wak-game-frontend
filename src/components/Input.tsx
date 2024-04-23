@@ -19,14 +19,18 @@ const StyledInput = styled.input`
   &:focus {
     outline-width: 0rem;
   }
+  font-family: 'DungGeunMo';
+  font-size: 2.4rem;
+  text-align: center;
+  color: black;
 `;
 
 const BorderX = styled.img.attrs({
   src: require('../assets/img-border-black-h56.png'),
   alt: '닉네임 입력',
-})<{ right?: string }>`
+})<{ $right?: boolean }>`
   ${(props) =>
-    props.right &&
+    props.$right &&
     css`
       transform: rotate(0.5turn);
     `};
@@ -41,7 +45,7 @@ export default function Input({ width }: InputProps) {
     <Layout>
       <BorderX />
       <StyledInput width={width || '20rem'} />
-      <BorderX right='true' />
+      <BorderX $right />
     </Layout>
   );
 }

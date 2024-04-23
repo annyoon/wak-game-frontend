@@ -1,20 +1,16 @@
-import styled from 'styled-components';
-import Input from '../../components/Input';
+import styled, { keyframes } from 'styled-components';
+import { FlexLayout } from '../../styles/layout';
 import { RegularText } from '../../styles/fonts';
+import Input from '../../components/Input';
 
 import main1 from '../../assets/img-main1.png';
 
-const BackgroundImg = styled.div`
+const Background = styled(FlexLayout)`
   width: 100%;
   height: 100%;
   background-image: url(${main1});
   background-size: cover;
   background-position: center;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
 `;
 
 const TitleImg = styled.img.attrs({
@@ -24,13 +20,22 @@ const TitleImg = styled.img.attrs({
   transform: scale(0.8);
 `;
 
+const BlinkRegularText = styled(RegularText)`
+  animation: ${keyframes`
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+  `} 1s steps(2, jump-none) infinite;
+`;
+
 export default function StartPage() {
   return (
-    <BackgroundImg>
+    <Background $col>
       <TitleImg />
-      <RegularText>Win Alive with Clicks</RegularText>
-      <RegularText>시작하려면 닉네임을 입력하세요</RegularText>
+      <FlexLayout $col gap='8rem'>
+        <RegularText>Win Alive with Clicks</RegularText>
+        <BlinkRegularText>시작하려면 닉네임을 입력하세요</BlinkRegularText>
+      </FlexLayout>
       <Input width='44rem' />
-    </BackgroundImg>
+    </Background>
   );
 }
