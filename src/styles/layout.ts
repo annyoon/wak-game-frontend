@@ -14,3 +14,12 @@ export const FlexLayout = styled.div<{
       flex-direction: column;
     `};
 `;
+
+export const DarkBackground = styled(FlexLayout)`
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background: rgba(0, 0, 0, 0.2);
+`;

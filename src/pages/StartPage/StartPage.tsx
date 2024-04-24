@@ -1,12 +1,12 @@
 import styled, { keyframes } from 'styled-components';
-import { FlexLayout } from '../../styles/layout';
-import { RegularText } from '../../styles/fonts';
+import { FlexLayout, DarkBackground } from '../../styles/layout';
+import { SmallText, RegularText } from '../../styles/fonts';
 import Input from '../../components/Input';
 import RoundButton from '../../components/RoundButton';
 
 import main1 from '../../assets/img-main1.png';
 
-const Background = styled(FlexLayout)`
+const Background = styled.div`
   width: 100%;
   height: 100%;
   background-image: url(${main1});
@@ -21,7 +21,7 @@ const TitleImg = styled.img.attrs({
   transform: scale(0.8);
 `;
 
-const BlinkRegularText = styled(RegularText)`
+const BlinkSmallText = styled(SmallText)`
   animation: ${keyframes`
     0% { opacity: 0; }
     100% { opacity: 1; }
@@ -30,14 +30,16 @@ const BlinkRegularText = styled(RegularText)`
 
 export default function StartPage() {
   return (
-    <Background $col>
-      <TitleImg />
-      <FlexLayout $col gap='8rem'>
-        <RegularText>Win Alive with Clicks</RegularText>
-        <BlinkRegularText>시작하려면 닉네임을 입력하세요</BlinkRegularText>
-      </FlexLayout>
-      <Input width='44rem' />
-      <RoundButton label={'게임 시작'} />
+    <Background>
+      <DarkBackground $col>
+        <TitleImg />
+        <FlexLayout $col gap='8rem'>
+          <RegularText>Win Alive with Clicks</RegularText>
+          <BlinkSmallText>시작하려면 닉네임을 입력하세요</BlinkSmallText>
+        </FlexLayout>
+        <Input width='40rem' />
+        <RoundButton label={'게임 시작'} />
+      </DarkBackground>
     </Background>
   );
 }
