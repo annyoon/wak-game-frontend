@@ -7,7 +7,7 @@ export const FlexLayout = styled.div<{
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: ${(props) => props.gap || '1rem'};
+  gap: ${(props) => props.gap || '2rem'};
   ${(props) =>
     props.$col &&
     css`
@@ -21,5 +21,5 @@ export const DarkBackground = styled(FlexLayout)`
   position: absolute;
   left: 0;
   top: 0;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.28);
 `;

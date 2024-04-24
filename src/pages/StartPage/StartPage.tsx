@@ -19,7 +19,8 @@ const TitleImg = styled.img.attrs({
   src: require('../../assets/img-title1.png'),
   alt: 'WAK GAME',
 })`
-  transform: scale(0.8);
+  width: 28rem;
+  height: fit-content;
 `;
 
 const BlinkSmallText = styled(SmallText)`
@@ -34,12 +35,14 @@ export default function StartPage() {
     <Background>
       <DarkBackground $col>
         <TitleImg />
-        <FlexLayout $col gap='8rem'>
-          <RegularText>Win Alive with Clicks</RegularText>
-          <BlinkSmallText>시작하려면 닉네임을 입력하세요</BlinkSmallText>
+        <FlexLayout $col gap='12rem'>
+          <RegularText>{`Win Alive with Clicks`}</RegularText>
+          <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
         </FlexLayout>
-        <Input width='40rem' />
-        <Button label={'게임 시작'} />
+        <FlexLayout gap='1rem'>
+          <Input width='36rem' />
+          <Button label={`GO!`} />
+        </FlexLayout>
       </DarkBackground>
     </Background>
   );
