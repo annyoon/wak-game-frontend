@@ -1,19 +1,10 @@
 import styled, { keyframes } from 'styled-components';
-import { FlexLayout, DarkBackground } from '../../styles/layout';
+import { FlexLayout } from '../../styles/layout';
 import { SmallText, RegularText } from '../../styles/fonts';
 
+import Background from '../../components/Background';
 import Input from '../../components/Input';
 import Button from '../../components/Button';
-
-import main1 from '../../assets/img-main1.png';
-
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  background-image: url(${main1});
-  background-size: cover;
-  background-position: center;
-`;
 
 const TitleImg = styled.img.attrs({
   src: require('../../assets/img-title1.png'),
@@ -32,18 +23,16 @@ const BlinkSmallText = styled(SmallText)`
 
 export default function StartPage() {
   return (
-    <Background>
-      <DarkBackground $col>
-        <TitleImg />
-        <FlexLayout $col gap='12rem'>
-          <RegularText>{`Win Alive with Clicks`}</RegularText>
-          <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
-        </FlexLayout>
-        <FlexLayout gap='1rem'>
-          <Input width='36rem' />
-          <Button label={`GO!`} />
-        </FlexLayout>
-      </DarkBackground>
+    <Background $col $opaque={0.32}>
+      <TitleImg />
+      <FlexLayout $col gap='12rem'>
+        <RegularText>{`Win Alive with Clicks`}</RegularText>
+        <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
+      </FlexLayout>
+      <FlexLayout gap='1rem'>
+        <Input width='36rem' />
+        <Button label={`GO!`} />
+      </FlexLayout>
     </Background>
   );
 }

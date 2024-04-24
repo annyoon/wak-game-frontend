@@ -4,7 +4,7 @@ import { SmallText } from '../styles/fonts';
 const StyledButton = styled.button`
   width: fit-content;
   height: fit-content;
-  padding: 0.8rem 1.2rem;
+  padding: 0.6rem 1.2rem;
   border-style: outset;
   border-width: 0.4rem;
   border-color: #f2f2f2;
