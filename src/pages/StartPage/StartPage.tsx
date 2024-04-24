@@ -21,11 +21,16 @@ const BlinkSmallText = styled(SmallText)`
   `} 1s steps(2, jump-none) infinite;
 `;
 
+const Copyright = styled(SmallText)`
+  position: fixed;
+  bottom: 2.4rem;
+`;
+
 export default function StartPage() {
   return (
     <Background $col $opaque={0.32}>
       <TitleImg />
-      <FlexLayout $col gap='12rem'>
+      <FlexLayout $col gap='10rem'>
         <RegularText>{`Win Alive with Clicks`}</RegularText>
         <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
       </FlexLayout>
@@ -33,6 +38,7 @@ export default function StartPage() {
         <Input width='36rem' />
         <Button label={`GO!`} />
       </FlexLayout>
+      <Copyright color='#bababa'>{`© 2024 GongGongChilPal`}</Copyright>
     </Background>
   );
 }
