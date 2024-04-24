@@ -1,6 +1,7 @@
 import styled, { css } from 'styled-components';
+import { textStyles } from '../styles/fonts';
 
-const Layout = styled.div`
+const InputBlock = styled.div`
   display: flex;
   align-items: center;
 `;
@@ -19,10 +20,8 @@ const StyledInput = styled.input`
   &:focus {
     outline-width: 0rem;
   }
-  font-family: 'DungGeunMo';
-  font-size: 2.4rem;
+  ${textStyles}
   text-align: center;
-  color: black;
 `;
 
 const BorderX = styled.img.attrs({
@@ -42,10 +41,10 @@ type InputProps = {
 
 export default function Input({ width }: InputProps) {
   return (
-    <Layout>
+    <InputBlock>
       <BorderX />
       <StyledInput width={width || '20rem'} />
       <BorderX $right />
-    </Layout>
+    </InputBlock>
   );
 }

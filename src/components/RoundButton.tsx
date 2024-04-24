@@ -1,4 +1,5 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
+import { SmallText } from '../styles/fonts';
 
 import PurpleButton from '../assets/buttonImg/img-button-purple.png';
 import BlueButton from '../assets/buttonImg/img-button-blue.png';
@@ -33,10 +34,7 @@ const StyledButton = styled.button<{ color: string }>`
     padding: 1rem 0 0 0;
     background-position: bottom, bottom;
   }
-  font-family: 'DungGeunMo';
-  font-size: 2.8rem;
   text-align: center;
-  color: white;
 `;
 
 type RoundButtonProps = {
@@ -52,7 +50,7 @@ export default function RoundButton({
 }: RoundButtonProps) {
   return (
     <StyledButton color={color || 'purple'} {...props}>
-      {label}
+      <SmallText>{label}</SmallText>
     </StyledButton>
   );
 }
