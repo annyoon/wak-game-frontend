@@ -1,3 +1,6 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import styled, { keyframes } from 'styled-components';
 import { SmallText } from '../../../styles/fonts';
 import { FlexLayout } from '../../../styles/layout';
@@ -13,14 +16,24 @@ const BlinkSmallText = styled(SmallText)`
 `;
 
 export default function NicknameForm() {
-  const onChageInput = (e: React.ChangeEvent<HTMLInputElement>) => {};
+  const navigate = useNavigate();
+  const [nickname, setNickname] = useState('');
+
+  const onChangeInput = (e: { target: { value: string } }) => {
+    setNickname(e.target.value);
+  };
+
+  const handleClick = () => {
+    console.log(nickname);
+    navigate('/lobby');
+  };
 
   return (
     <FlexLayout $isCol gap='1rem'>
       <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
       <FlexLayout gap='1rem'>
-        <Input width='36rem' onChange={onChageInput} />
-        <Button label={`GO!`} />
+        <Input name='nickname' width='36rem' onChange={onChangeInput} />
+        <Button label={`GO!`} onClick={handleClick} />
       </FlexLayout>
     </FlexLayout>
   );

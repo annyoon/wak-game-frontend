@@ -33,5 +33,5 @@ export const DarkBackground = styled.div<{ $opaque?: number }>`
   position: fixed;
   top: 0;
   left: 0;
-  background: ${(props) => `rgba(0, 0, 0, ${props.$opaque || 0.8})`};
+  background: ${(props) => `rgba(0, 0, 0, ${props.$opaque || 0.6})`};
 `;

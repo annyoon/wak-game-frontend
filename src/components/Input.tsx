@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import styled, { css } from 'styled-components';
 import { textStyles } from '../styles/fonts';
 
@@ -36,15 +38,30 @@ const BorderX = styled.img.attrs({
 `;
 
 type InputProps = {
+  name: string;
   width?: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({ width, ...props }: InputProps) {
+export default function Input({ name, width, onChange, ...props }: InputProps) {
+  const [inputValue, SetInputValue] = useState('');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    onChange && onChange(e);
+    SetInputValue(newValue);
+  };
+
   return (
     <InputBlock>
       <BorderX />
-      <StyledInput width={width || '20rem'} color='black' {...props} />
+      <StyledInput
+        name={name}
+        value={inputValue}
+        width={width || '20rem'}
+        color='black'
+        onChange={handleChange}
+      />
       <BorderX $right />
     </InputBlock>
   );
