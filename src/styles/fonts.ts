@@ -1,19 +1,17 @@
 import styled, { css } from 'styled-components';
 
-export const textStyles = css`
+export const textStyles = css<{ color?: string }>`
   font-family: 'DungGeunMo';
   font-size: 2rem;
-  color: black;
+  color: ${(props) => props.color || 'white'};
 `;
 
-export const SmallText = styled.div`
-  ${textStyles}
+export const SmallText = styled.div<{ color?: string }>`
+  ${textStyles};
   font-size: 2.8rem;
-  color: ${(props) => props.color || 'white'};
 `;
 
-export const RegularText = styled.div`
-  ${textStyles}
+export const RegularText = styled.div<{ color?: string }>`
+  ${textStyles};
   font-size: 3.6rem;
-  color: ${(props) => props.color || 'white'};
 `;

@@ -28,9 +28,9 @@ const Copyright = styled(SmallText)`
 
 export default function StartPage() {
   return (
-    <Background $col $opaque={0.32}>
+    <Background $isCol $opaque={0.32}>
       <TitleImg />
-      <FlexLayout $col gap='10rem'>
+      <FlexLayout $isCol gap='10rem'>
         <RegularText>{`Win Alive with Clicks`}</RegularText>
         <BlinkSmallText>{`시작하려면 닉네임을 입력하세요`}</BlinkSmallText>
       </FlexLayout>

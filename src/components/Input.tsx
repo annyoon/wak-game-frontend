@@ -20,7 +20,7 @@ const StyledInput = styled.input`
   &:focus {
     outline-width: 0rem;
   }
-  ${textStyles}
+  ${(props) => props.color && textStyles}
   text-align: center;
 `;
 
@@ -43,7 +43,7 @@ export default function Input({ width }: InputProps) {
   return (
     <InputBlock>
       <BorderX />
-      <StyledInput width={width || '20rem'} />
+      <StyledInput width={width || '20rem'} color='black' />
       <BorderX $right />
     </InputBlock>
   );
