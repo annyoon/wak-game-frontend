@@ -37,13 +37,14 @@ const BorderX = styled.img.attrs({
 
 type InputProps = {
   width?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({ width }: InputProps) {
+export default function Input({ width, ...props }: InputProps) {
   return (
     <InputBlock>
       <BorderX />
-      <StyledInput width={width || '20rem'} color='black' />
+      <StyledInput width={width || '20rem'} color='black' {...props} />
       <BorderX $right />
     </InputBlock>
   );
