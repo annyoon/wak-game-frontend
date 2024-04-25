@@ -9,22 +9,22 @@ const BackgroundLayout = styled(FlexLayout)`
 `;
 
 type BackgroundProps = {
-  $isCol?: boolean;
+  isCol?: boolean;
   gap?: string;
-  $opaque?: number;
+  opaque?: number;
   children: React.ReactNode;
 };
 
 export default function Background({
-  $isCol,
+  isCol,
   gap,
-  $opaque,
+  opaque,
   children,
 }: BackgroundProps) {
   return (
     <ImgBackground $img={main1}>
-      <DarkBackground $opaque={$opaque}>
-        <BackgroundLayout $isCol={$isCol} gap={gap}>
+      <DarkBackground $opaque={opaque}>
+        <BackgroundLayout $isCol={isCol} gap={gap}>
           {children}
         </BackgroundLayout>
       </DarkBackground>

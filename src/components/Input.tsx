@@ -28,7 +28,7 @@ const StyledInput = styled.input`
 
 const BorderX = styled.img.attrs({
   src: require('../assets/img-border-black-h56.png'),
-  alt: '닉네임 입력',
+  alt: '입력',
 })<{ $right?: boolean }>`
   ${(props) =>
     props.$right &&
@@ -43,7 +43,7 @@ type InputProps = {
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({ name, width, onChange, ...props }: InputProps) {
+export default function Input({ name, width, onChange }: InputProps) {
   const [inputValue, SetInputValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

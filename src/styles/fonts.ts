@@ -15,3 +15,8 @@ export const RegularText = styled.div<{ color?: string }>`
   ${textStyles};
   font-size: 3.6rem;
 `;
+
+export const LargeText = styled.div<{ color?: string }>`
+  ${textStyles};
+  font-size: 4.4rem;
+`;
