@@ -8,8 +8,8 @@ export default function RoomList() {
 
   return (
     <GridLayout $col={2} gap='2.4rem'>
-      {rooms.map(() => {
-        return <WhiteRoundBox width='36rem'></WhiteRoundBox>;
+      {rooms.map((value, index) => {
+        return <WhiteRoundBox key={index} width='36rem'></WhiteRoundBox>;
       })}
     </GridLayout>
   );
