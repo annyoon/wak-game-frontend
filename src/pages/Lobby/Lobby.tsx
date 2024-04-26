@@ -19,7 +19,7 @@ export default function LobbyPage() {
           <RoomList />
         </LeftSection>
         <div>
-          <ChatBox />
+          <ChatBox text={`전체 채팅`} />
         </div>
       </FlexLayout>
     </Background>

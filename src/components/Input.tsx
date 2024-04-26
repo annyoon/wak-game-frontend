@@ -11,7 +11,7 @@ const InputBlock = styled.div`
 const StyledInput = styled.input<{ $isRound?: boolean }>`
   width: ${(props) => props.width};
   height: ${(props) => (props.$isRound ? '4.8rem' : '3.4rem')};
-  padding: 0rem;
+  padding: 0rem 1rem;
   border-style: solid;
   border-color: black;
   border-left-width: 0rem;
@@ -66,7 +66,7 @@ export default function Input({ name, width, isRound, onChange }: InputProps) {
         $isRound={isRound}
         name={name}
         value={inputValue}
-        width={width || '22rem'}
+        width={width || '20rem'}
         color='black'
         onChange={handleChange}
       />
