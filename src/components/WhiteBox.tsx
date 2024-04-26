@@ -1,20 +1,26 @@
 import styled, { css } from 'styled-components';
+import { FlexLayout } from '../styles/layout';
 
 const BoxBlock = styled.div`
   display: flex;
   align-items: center;
 `;
 
-const StyledBox = styled.div<{ $width: string }>`
+const Layout = styled(FlexLayout)`
+  justify-content: space-between;
+`;
+
+const StyledBox = styled(Layout)<{ $width: string }>`
   width: ${(props) => props.$width};
-  height: 63.2rem;
+  height: 60.8rem;
+  padding: 1.2rem 1rem;
   border-style: solid;
   border-color: white;
   border-left-width: 0rem;
   border-right-width: 0rem;
   border-top-width: 0.4rem;
   border-bottom-width: 0.4rem;
-  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
 `;
 
 const BorderX = styled.img.attrs({
@@ -37,7 +43,9 @@ export default function WhiteBox({ width, children }: WhiteBoxProps) {
   return (
     <BoxBlock>
       <BorderX />
-      <StyledBox $width={width}>{children}</StyledBox>
+      <StyledBox $isCol $width={width} gap='1rem'>
+        {children}
+      </StyledBox>
       <BorderX $right />
     </BoxBlock>
   );
