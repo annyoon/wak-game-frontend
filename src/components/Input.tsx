@@ -8,9 +8,9 @@ const InputBlock = styled.div`
   align-items: center;
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled.input<{ $isRound?: boolean }>`
   width: ${(props) => props.width};
-  height: 4.8rem;
+  height: ${(props) => (props.$isRound ? '4.8rem' : '3.4rem')};
   padding: 0rem;
   border-style: solid;
   border-color: black;
@@ -18,18 +18,20 @@ const StyledInput = styled.input`
   border-right-width: 0rem;
   border-top-width: 0.4rem;
   border-bottom-width: 0.4rem;
-  background-color: rgba(255, 255, 355, 0.6);
+  background-color: ${(props) =>
+    props.$isRound
+      ? css`rgba(255, 255, 255, 0.6);`
+      : css`rgba(255, 255, 255, 0.8)`};
   &:focus {
     outline-width: 0rem;
   }
-  ${(props) => props.color && textStyles}
-  text-align: center;
+  ${textStyles}
+  text-align: ${(props) => (props.$isRound ? 'center' : 'start')};
 `;
 
 const BorderX = styled.img.attrs({
-  src: require('../assets/img-border-black-h56.png'),
   alt: '입력',
-})<{ $right?: boolean }>`
+})<{ $right?: boolean; $img?: string }>`
   ${(props) =>
     props.$right &&
     css`
@@ -40,10 +42,11 @@ const BorderX = styled.img.attrs({
 type InputProps = {
   name: string;
   width?: string;
+  isRound?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-export default function Input({ name, width, onChange }: InputProps) {
+export default function Input({ name, width, isRound, onChange }: InputProps) {
   const [inputValue, SetInputValue] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,17 +55,22 @@ export default function Input({ name, width, onChange }: InputProps) {
     SetInputValue(newValue);
   };
 
+  const img = isRound
+    ? require('../assets/img-border-black-h56.png')
+    : require('../assets/img-border-black-h42.png');
+
   return (
     <InputBlock>
-      <BorderX />
+      <BorderX src={img} />
       <StyledInput
+        $isRound={isRound}
         name={name}
         value={inputValue}
-        width={width || '20rem'}
+        width={width || '22rem'}
         color='black'
         onChange={handleChange}
       />
-      <BorderX $right />
+      <BorderX src={img} $right />
     </InputBlock>
   );
 }
