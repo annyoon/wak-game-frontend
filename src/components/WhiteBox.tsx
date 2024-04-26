@@ -1,41 +1,44 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 const BoxBlock = styled.div`
   display: flex;
-  flex-direction: column;
   align-items: center;
 `;
 
-const StyledBox = styled.div<{ $width?: string; $height: string }>`
-  width: ${(props) => props.$width || '36rem'};
-  height: ${(props) => props.$height};
+const StyledBox = styled.div<{ $width: string }>`
+  width: ${(props) => props.$width};
+  height: 63.2rem;
   border-style: solid;
   border-color: white;
-  border-left-width: 0.4rem;
-  border-right-width: 0.4rem;
-  border-top-width: 0rem;
-  border-bottom-width: 0rem;
+  border-left-width: 0rem;
+  border-right-width: 0rem;
+  border-top-width: 0.4rem;
+  border-bottom-width: 0.4rem;
   text-align: center;
 `;
 
-const BorderY = styled.img.attrs({
-  src: require('../assets/img-border-white-w360.png'),
+const BorderX = styled.img.attrs({
+  src: require('../assets/img-border-white-h640.png'),
   alt: '',
-})<{ $width?: string }>`
-  width: ${(props) => props.$width || '36rem'};
+})<{ $right?: boolean }>`
+  ${(props) =>
+    props.$right &&
+    css`
+      transform: rotate(0.5turn);
+    `};
 `;
 
 type WhiteBoxProps = {
-  height: string;
+  width: string;
   children?: React.ReactNode;
 };
 
-export default function WhiteBox({ height, children }: WhiteBoxProps) {
+export default function WhiteBox({ width, children }: WhiteBoxProps) {
   return (
     <BoxBlock>
-      <BorderY />
-      <StyledBox $height={height}>{children}</StyledBox>
-      <BorderY />
+      <BorderX />
+      <StyledBox $width={width}>{children}</StyledBox>
+      <BorderX $right />
     </BoxBlock>
   );
 }
