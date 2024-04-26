@@ -56,8 +56,8 @@ export default function Input({ name, width, isRound, onChange }: InputProps) {
   };
 
   const img = isRound
-    ? require('../assets/img-border-black-h56.png')
-    : require('../assets/img-border-black-h42.png');
+    ? require('../assets/borderImg/img-border-black-h56.png')
+    : require('../assets/borderImg/img-border-black-h42.png');
 
   return (
     <InputBlock>
