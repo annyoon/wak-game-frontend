@@ -14,7 +14,7 @@ export default function LobbyPage() {
   return (
     <Background>
       <FlexLayout gap='4rem'>
-        <LeftSection $isCol>
+        <LeftSection $isCol gap='2.8rem'>
           <LobbyText />
           <RoomList />
         </LeftSection>
