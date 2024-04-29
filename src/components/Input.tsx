@@ -31,7 +31,7 @@ const StyledInput = styled.input<{ $isRound?: boolean }>`
 
 const BorderX = styled.img.attrs({
   alt: '입력',
-})<{ $right?: boolean; $img?: string }>`
+})<{ $right?: boolean }>`
   ${(props) =>
     props.$right &&
     css`

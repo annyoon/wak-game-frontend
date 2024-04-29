@@ -1,5 +1,9 @@
 import Button from '../../../components/Button';
 
-export default function NewButton() {
-  return <Button isBigger label={'방 만들기'} />;
+type NewButtonProps = {
+  handleClick: () => void;
+};
+
+export default function NewButton({ handleClick }: NewButtonProps) {
+  return <Button isBigger label={'방 만들기'} onClick={handleClick} />;
 }

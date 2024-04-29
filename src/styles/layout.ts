@@ -6,7 +6,7 @@ const FixedLayout = css`
   left: 0;
   bottom: 0;
   right: 0;
-  padding: 4rem;
+  padding: 2rem;
 `;
 
 export const ImgBackground = styled.div<{ $img: string }>`

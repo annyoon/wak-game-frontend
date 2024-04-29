@@ -15,14 +15,18 @@ const TextBlock = styled.div`
   gap: 2rem;
 `;
 
-export default function LobbyHeader() {
+type LobbyHeaderProps = {
+  openDialog: () => void;
+};
+
+export default function LobbyHeader({ openDialog }: LobbyHeaderProps) {
   return (
     <HeaderBlock>
       <TextBlock>
         <RegularText>{`내 이름 : 김싸피`}</RegularText>
         <RegularText>{`참여할 수 있는 게임`}</RegularText>
       </TextBlock>
-      <NewButton />
+      <NewButton handleClick={openDialog} />
     </HeaderBlock>
   );
 }
