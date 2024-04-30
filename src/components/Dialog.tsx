@@ -1,7 +1,7 @@
 import { useRef } from 'react';
 
 import styled, { css } from 'styled-components';
-import { DarkBackground } from '../styles/layout';
+import { DarkBackground, FlexLayout } from '../styles/layout';
 import { motion } from 'framer-motion';
 
 const DialogLayout = styled(motion.div)`
@@ -12,9 +12,10 @@ const DialogLayout = styled(motion.div)`
   align-items: center;
 `;
 
-const DialogBlock = styled.div<{ width?: string }>`
+const DialogBlock = styled(FlexLayout)<{ width?: string }>`
   width: ${(props) => props.width || '78rem'};
   height: 47.2rem;
+  border-style: solid;
   border-left-width: 0rem;
   border-right-width: 0rem;
   border-top-width: 0.4rem;
@@ -37,7 +38,7 @@ type DialogProps = {
   width?: string;
   isOpen: boolean;
   children?: React.ReactNode;
-  onClose?: () => void;
+  onClose: () => void;
 };
 
 export default function Dialog({
@@ -72,7 +73,9 @@ export default function Dialog({
         }}
       >
         <BorderX />
-        <DialogBlock width={width}>{children}</DialogBlock>
+        <DialogBlock $isCol width={width}>
+          {children}
+        </DialogBlock>
         <BorderX $right />
       </DialogLayout>
     </DarkBackground>

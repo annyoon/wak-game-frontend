@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { RegularText } from '../../../styles/fonts';
-import NewButton from './NewButton';
+import NewRoomButton from './NewRoomButton';
 
 const HeaderBlock = styled.div`
   place-self: stretch;
@@ -26,7 +26,7 @@ export default function LobbyHeader({ openDialog }: LobbyHeaderProps) {
         <RegularText>{`내 이름 : 김싸피`}</RegularText>
         <RegularText>{`참여할 수 있는 게임`}</RegularText>
       </TextBlock>
-      <NewButton handleClick={openDialog} />
+      <NewRoomButton handleClick={openDialog} />
     </HeaderBlock>
   );
 }
