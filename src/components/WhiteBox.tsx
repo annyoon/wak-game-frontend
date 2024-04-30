@@ -10,9 +10,9 @@ const Layout = styled(FlexLayout)`
   justify-content: space-between;
 `;
 
-const StyledBox = styled(Layout)<{ $width: string }>`
+const StyledBox = styled(Layout)<{ $width: string; $height: string }>`
   width: ${(props) => props.$width};
-  height: 60.8rem;
+  height: ${(props) => props.$height};
   padding: 1.2rem 1rem;
   border-style: solid;
   border-color: white;
@@ -41,24 +41,27 @@ type WhiteBoxProps = {
 
 export default function WhiteBox({ mode, width, children }: WhiteBoxProps) {
   let img;
+  let height;
 
   switch (mode) {
     case 'TALL':
       img = require('../assets/borderImg/img-border-white-h640.png');
+      height = '60.8rem';
       break;
     case 'MEDIUM':
-      img = require('../assets/borderImg/img-border-white-h510.png');
-
+      img = require('../assets/borderImg/img-border-white-h400.png');
+      height = '36.8rem';
       break;
     case 'SHORT':
     default:
       img = require('../assets/borderImg/img-border-white-h320.png');
+      height = '28.8rem';
   }
 
   return (
     <BoxBlock>
       <BorderX src={img} />
-      <StyledBox $isCol $width={width} gap='1rem'>
+      <StyledBox $isCol $width={width} $height={height} gap='1rem'>
         {children}
       </StyledBox>
       <BorderX src={img} $right />
