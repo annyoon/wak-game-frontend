@@ -24,7 +24,6 @@ const StyledBox = styled(Layout)<{ $width: string }>`
 `;
 
 const BorderX = styled.img.attrs({
-  src: require('../assets/borderImg/img-border-white-h640.png'),
   alt: '',
 })<{ $right?: boolean }>`
   ${(props) =>
@@ -35,18 +34,34 @@ const BorderX = styled.img.attrs({
 `;
 
 type WhiteBoxProps = {
+  mode: 'TALL' | 'MEDIUM' | 'SHORT';
   width: string;
   children?: React.ReactNode;
 };
 
-export default function WhiteBox({ width, children }: WhiteBoxProps) {
+export default function WhiteBox({ mode, width, children }: WhiteBoxProps) {
+  let img;
+
+  switch (mode) {
+    case 'TALL':
+      img = require('../assets/borderImg/img-border-white-h640.png');
+      break;
+    case 'MEDIUM':
+      img = require('../assets/borderImg/img-border-white-h510.png');
+
+      break;
+    case 'SHORT':
+    default:
+      img = require('../assets/borderImg/img-border-white-h320.png');
+  }
+
   return (
     <BoxBlock>
-      <BorderX />
+      <BorderX src={img} />
       <StyledBox $isCol $width={width} gap='1rem'>
         {children}
       </StyledBox>
-      <BorderX $right />
+      <BorderX src={img} $right />
     </BoxBlock>
   );
 }

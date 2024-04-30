@@ -37,7 +37,7 @@ export default function ChatBox({ text }: ChatBoxProps) {
   };
 
   return (
-    <WhiteBox width='32rem'>
+    <WhiteBox mode='TALL' width='32rem'>
       <GrayBox text={text} />
       <ChatText>
         {userChatting.map((value, index) => {
