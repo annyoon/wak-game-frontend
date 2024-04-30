@@ -16,6 +16,9 @@ const StyledCheckbox = styled.div`
   border-top-width: 0.4rem;
   border-bottom-width: 0.4rem;
   background-color: white;
+  &:hover {
+    background-color: #00000020;
+  }
   text-align: center;
   line-height: 3.2rem;
 `;

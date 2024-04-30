@@ -14,7 +14,7 @@ const DialogLayout = styled(motion.div)`
 
 const DialogBlock = styled(FlexLayout)<{ width?: string }>`
   width: ${(props) => props.width || '78rem'};
-  height: 47.2rem;
+  height: 53.2rem;
   border-style: solid;
   border-left-width: 0rem;
   border-right-width: 0rem;
@@ -24,7 +24,7 @@ const DialogBlock = styled(FlexLayout)<{ width?: string }>`
 `;
 
 const BorderX = styled.img.attrs({
-  src: require('../assets/borderImg/img-border-black-h480.png'),
+  src: require('../assets/borderImg/img-border-black-h540.png'),
   alt: '모달',
 })<{ $right?: boolean }>`
   ${(props) =>
