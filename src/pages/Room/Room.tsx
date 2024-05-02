@@ -11,9 +11,9 @@ export default function RoomPage() {
     <Background>
       <FlexLayout gap='4rem'>
         <FlexLayout $isCol gap='3.2rem'>
-          <RoomHeader />
-          <PlayersList />
-          <ButtonGroup />
+          <RoomHeader isHost={true} />
+          <PlayersList isHost={true} />
+          <ButtonGroup isHost={true} />
         </FlexLayout>
         <div>
           <ChatBox text={`방 채팅`} />

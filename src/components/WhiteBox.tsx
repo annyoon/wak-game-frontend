@@ -54,8 +54,8 @@ export default function WhiteBox({ mode, width, children }: WhiteBoxProps) {
       break;
     case 'SHORT':
     default:
-      img = require('../assets/borderImg/img-border-white-h320.png');
-      height = '28.8rem';
+      img = require('../assets/borderImg/img-border-white-h240.png');
+      height = '20.8rem';
   }
 
   return (

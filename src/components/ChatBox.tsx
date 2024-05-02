@@ -5,7 +5,7 @@ import { FlexLayout } from '../styles/layout';
 import { textStyles } from '../styles/fonts';
 
 import WhiteBox from './WhiteBox';
-import GrayBox from './GrayBox';
+import GrayTitleBox from './GrayTitleBox';
 import Input from './Input';
 import Button from './Button';
 
@@ -38,7 +38,7 @@ export default function ChatBox({ text }: ChatBoxProps) {
 
   return (
     <WhiteBox mode='TALL' width='32rem'>
-      <GrayBox text={text} />
+      <GrayTitleBox text={text} />
       <ChatText>
         {userChatting.map((value, index) => {
           return <div key={index}>{`${value[0]} : ${value[1]}`}</div>;

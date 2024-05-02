@@ -18,16 +18,20 @@ const StateBlock = styled.div`
   display: flex;
 `;
 
-// type RoomHeaderProps = {};
+type RoomHeaderProps = {
+  isHost: boolean;
+};
 
-export default function RoomHeader() {
+export default function RoomHeader({ isHost }: RoomHeaderProps) {
   return (
     <HeaderBlock>
       <TextBlock>
-        <StateBlock>
-          {/* 이미지 */}
-          <SmallText>{`방장이 게임을 시작하기를 기다리는 중입니다 ...`}</SmallText>
-        </StateBlock>
+        {!isHost && (
+          <StateBlock>
+            {/* 이미지 */}
+            <SmallText>{`방장이 게임을 시작하기를 기다리는 중입니다 ...`}</SmallText>
+          </StateBlock>
+        )}
         <RegularText>{`현재 방 이름 : 덤벼`}</RegularText>
         <RegularText>{`참가자 수 : 22 / 40 명`}</RegularText>
       </TextBlock>

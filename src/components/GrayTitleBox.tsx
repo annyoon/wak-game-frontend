@@ -16,11 +16,11 @@ const Box = styled.div`
   align-items: center;
 `;
 
-type GrayBoxProps = {
+type GrayTitleBoxProps = {
   text: string;
 };
 
-export default function GrayBox({ text }: GrayBoxProps) {
+export default function GrayTitleBox({ text }: GrayTitleBoxProps) {
   return (
     <Box>
       <RegularText color='black'>{text}</RegularText>
