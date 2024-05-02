@@ -59,12 +59,12 @@ export default function WhiteBox({ mode, width, children }: WhiteBoxProps) {
   }
 
   return (
-    <BoxBlock>
+    <FlexLayout>
       <BorderX src={img} />
       <StyledBox $isCol $width={width} $height={height} gap='1rem'>
         {children}
       </StyledBox>
       <BorderX src={img} $right />
-    </BoxBlock>
+    </FlexLayout>
   );
 }
