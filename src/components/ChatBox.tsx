@@ -40,7 +40,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
   return (
     <WhiteBox mode={isShort ? 'MEDIUM' : 'TALL'} width='32rem'>
       <GrayTitleBox text={text} />
-      <ChatText height={isShort ? '22rem' : '45.2rem'}>
+      <ChatText height={isShort ? '15.2rem' : '45.2rem'}>
         {userChatting.map((value, index) => {
           return <div key={index}>{`${value[0]} : ${value[1]}`}</div>;
         })}
