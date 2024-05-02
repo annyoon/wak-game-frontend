@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { RegularText } from '../../../styles/fonts';
+import { SmallText } from '../../../styles/fonts';
 
 const HeaderBlock = styled.div`
   place-self: stretch;
@@ -20,9 +20,9 @@ export default function GameHeader() {
   return (
     <HeaderBlock>
       <TextBlock>
-        <RegularText>{`현재 방 이름 : 덤벼 ( 1 라운드 )`}</RegularText>
-        <RegularText>{`생존자 수 : 40 / 40 명`}</RegularText>
-        <RegularText>{`내 상태 : 생존 !`}</RegularText>
+        <SmallText>{`현재 방 이름 : 덤벼 ( 1 라운드 )`}</SmallText>
+        <SmallText>{`생존자 수 : 40 / 40 명`}</SmallText>
+        <SmallText>{`내 상태 : 생존 !`}</SmallText>
       </TextBlock>
     </HeaderBlock>
   );
