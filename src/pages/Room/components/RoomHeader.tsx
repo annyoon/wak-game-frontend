@@ -18,11 +18,18 @@ const StateBlock = styled.div`
   display: flex;
 `;
 
+const LockImg = styled.img.attrs({
+  alt: '자물쇠',
+})`
+  width: 3.2rem;
+`;
+
 type RoomHeaderProps = {
+  isPublic: boolean;
   isHost: boolean;
 };
 
-export default function RoomHeader({ isHost }: RoomHeaderProps) {
+export default function RoomHeader({ isPublic, isHost }: RoomHeaderProps) {
   return (
     <HeaderBlock>
       <TextBlock>
@@ -35,7 +42,13 @@ export default function RoomHeader({ isHost }: RoomHeaderProps) {
         <RegularText>{`현재 방 이름 : 덤벼`}</RegularText>
         <RegularText>{`참가자 수 : 22 / 40 명`}</RegularText>
       </TextBlock>
-      <SmallText>아이콘</SmallText>
+      <LockImg
+        src={
+          isPublic
+            ? require('../../../assets/img-unlock.png')
+            : require('../../../assets/img-lock.png')
+        }
+      />
     </HeaderBlock>
   );
 }

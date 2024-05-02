@@ -13,7 +13,7 @@ export default function RoomPage() {
     <Background>
       <FlexLayout gap='4rem'>
         <FlexLayout $isCol gap='2.8rem'>
-          <RoomHeader isHost={isHost} />
+          <RoomHeader isPublic={true} isHost={isHost} />
           <FlexLayout $isCol gap='1.6rem'>
             <PlayerList isHost={isHost} />
             {isHost && <RoomSetting />}
