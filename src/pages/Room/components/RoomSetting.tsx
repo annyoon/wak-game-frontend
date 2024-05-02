@@ -14,7 +14,7 @@ const TextBlock = styled(FlexLayout)`
 
 export default function RoomSetting() {
   return (
-    <GrayBox mode='SHORT' width='79.6rem'>
+    <GrayBox mode='SHORT' width='79.2rem'>
       <TextBlock $isCol gap='1.2rem'>
         <FlexLayout gap='1rem'>
           <SmallText color='black'>{`방장은 관전하기`}</SmallText>

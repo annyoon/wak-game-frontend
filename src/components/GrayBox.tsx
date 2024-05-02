@@ -39,8 +39,8 @@ export default function GrayBox({ mode, width, children }: GrayBoxProps) {
       break;
     case 'TALL':
     default:
-      img = require('../assets/borderImg/img-border-black-h196.png');
-      height = '18.8rem';
+      img = require('../assets/borderImg/img-border-black-h400.png');
+      height = '39.2rem';
   }
 
   return (
