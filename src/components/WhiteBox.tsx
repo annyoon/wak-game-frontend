@@ -1,11 +1,6 @@
 import styled, { css } from 'styled-components';
 import { FlexLayout } from '../styles/layout';
 
-const BoxBlock = styled.div`
-  display: flex;
-  align-items: center;
-`;
-
 const Layout = styled(FlexLayout)`
   justify-content: space-between;
 `;
