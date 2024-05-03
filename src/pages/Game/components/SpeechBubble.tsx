@@ -4,7 +4,7 @@ import { SmallText, textStyles } from '../../../styles/fonts';
 
 import SpeechImg from '../../../assets/img-speech-bubble.png';
 
-const SpeechBubbleBox = styled(FlexLayout)`
+const SpeechBubbleBlock = styled(FlexLayout)`
   width: 38.2rem;
   height: 11.6rem;
   padding-left: 2rem;
@@ -22,12 +22,12 @@ const Text = styled.div`
 
 export default function SpeechBubble() {
   return (
-    <SpeechBubbleBox $isCol gap='1rem'>
+    <SpeechBubbleBlock $isCol gap='1rem'>
       <SmallText color='black'>{`방장의 한마디!`}</SmallText>
       <FlexLayout>
         <Text color='#725bff'>{`김라쿤`}</Text>
         <Text color='black'>{`: 바보들아 ~`}</Text>
       </FlexLayout>
-    </SpeechBubbleBox>
+    </SpeechBubbleBlock>
   );
 }

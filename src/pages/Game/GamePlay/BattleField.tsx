@@ -44,7 +44,7 @@ export default function BattleField() {
   }, []);
 
   return (
-    <GrayBox mode={'TALL'} width={'79.2rem'}>
+    <GrayBox mode={'MEDIUM'} width={'79.2rem'}>
       <BattleFieldLayout>
         {dots.map((dot, index) => (
           <Dot key={index} $top={dot.top} $left={dot.left}>

@@ -4,7 +4,7 @@ import { textStyles } from '../../../styles/fonts';
 
 import WhiteRoundBox from '../../../components/WhiteRoundBox';
 
-const KillLogBox = styled.div<{ isWaiting?: boolean }>`
+const KillLogBlock = styled.div<{ isWaiting?: boolean }>`
   width: 100%;
   height: 90%;
   overflow-y: auto;
@@ -17,7 +17,7 @@ const KillLogBox = styled.div<{ isWaiting?: boolean }>`
     `}
 `;
 
-const TextBox = styled(FlexLayout)`
+const TextBlock = styled(FlexLayout)`
   justify-content: space-evenly;
   margin-bottom: 0.4rem;
 `;
@@ -35,24 +35,24 @@ export default function KillLog({ isWaiting }: KillLogProps) {
 
   return (
     <WhiteRoundBox width='32rem'>
-      <KillLogBox isWaiting={isWaiting}>
+      <KillLogBlock isWaiting={isWaiting}>
         {isWaiting ? (
-          <TextBox>
+          <TextBlock>
             <Text>{`Kill Log`}</Text>
-          </TextBox>
+          </TextBlock>
         ) : (
           logs.map((value, index) => {
             return (
-              <TextBox key={index}>
+              <TextBlock key={index}>
                 <Text color='#725bff'>{`김라쿤`}</Text>
                 <Text>{`> > >`}</Text>
                 <Text>{`김라쿤`}</Text>
                 <Text>{`X`}</Text>
-              </TextBox>
+              </TextBlock>
             );
           })
         )}
-      </KillLogBox>
+      </KillLogBlock>
     </WhiteRoundBox>
   );
 }

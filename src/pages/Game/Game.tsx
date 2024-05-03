@@ -11,7 +11,7 @@ import GamePlay from './GamePlay/GamePlay';
 import GameResult from './GameResult/GameResult';
 
 export default function GamePage() {
-  const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('WAIT');
+  const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('RESULT');
 
   return (
     <Background>
@@ -23,7 +23,7 @@ export default function GamePage() {
           ) : state === 'PLAY' ? (
             <GamePlay />
           ) : (
-            <GameResult />
+            <GameResult isWinner round={3}/>
           )}
         </FlexLayout>
         <FlexLayout $isCol gap='1.2rem'>

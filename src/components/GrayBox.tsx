@@ -23,7 +23,7 @@ const BorderX = styled.img.attrs({
 `;
 
 type GrayBoxProps = {
-  mode: 'SHORT' | 'TALL';
+  mode: 'SHORT' | 'MEDIUM' | 'TALL';
   width: string;
   children?: React.ReactNode;
 };
@@ -37,10 +37,14 @@ export default function GrayBox({ mode, width, children }: GrayBoxProps) {
       img = require('../assets/borderImg/img-border-black-h196.png');
       height = '18.8rem';
       break;
-    case 'TALL':
-    default:
+    case 'MEDIUM':
       img = require('../assets/borderImg/img-border-black-h400.png');
       height = '39.2rem';
+      break;
+    case 'TALL':
+    default:
+      img = require('../assets/borderImg/img-border-black-h480.png');
+      height = '47.2rem';
   }
 
   return (
