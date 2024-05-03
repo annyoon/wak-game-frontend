@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import { GridLayout } from '../../../styles/layout';
 
 import WhiteBox from '../../../components/WhiteBox';
-import PlayerNickname from './PlayerNickname';
+import PlayerNickname from '../../../components/PlayerNickname';
 
 const ListBlock = styled(GridLayout)`
   width: 100%;
