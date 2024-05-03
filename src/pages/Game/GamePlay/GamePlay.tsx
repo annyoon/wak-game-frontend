@@ -2,7 +2,7 @@ import { FlexLayout } from '../../../styles/layout';
 
 import KillLog from '../components/KillLog';
 import SpeechBubble from '../components/SpeechBubble';
-import BattleField from '../components/BattleField';
+import BattleField from './BattleField';
 
 export default function GamePlay() {
   return (

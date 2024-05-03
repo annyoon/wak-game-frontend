@@ -2,16 +2,16 @@ import { FlexLayout } from '../../../styles/layout';
 
 import KillLog from '../components/KillLog';
 import SpeechBubble from '../components/SpeechBubble';
-import BattleField from '../components/BattleField';
+import BattleFieldWait from './BattleFieldWait';
 
 export default function GameWait() {
   return (
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
-        <KillLog />
+        <KillLog isWaiting />
         <SpeechBubble />
       </FlexLayout>
-      <BattleField />
+      <BattleFieldWait />
     </FlexLayout>
   );
 }
