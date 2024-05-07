@@ -1,4 +1,6 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { createRoom } from '../../../api/room';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
@@ -43,6 +45,7 @@ type NewRoomDialogProps = {
 };
 
 export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
+  const navigate = useNavigate();
   const [info, setInfo] = useState({
     title: '',
     players: 0,
@@ -61,7 +64,7 @@ export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
     setInfo({ ...info, [name]: value });
   };
 
-  const handleClick = () => {
+  const handleClick = async () => {
     setWarn((prevWarn) => {
       const updatedWarn = { ...prevWarn };
 
@@ -89,7 +92,15 @@ export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
       warn.warnPlayers === false &&
       warn.warnPassword === false
     ) {
-      // API
+      try {
+        const { title, players, password, mode } = info;
+        const fetchedData = await createRoom(title, players, password, mode);
+        console.log(fetchedData);
+        // 성공
+      } catch (error: any) {
+        console.error('방 만들기 에러', error);
+        navigate('/error');
+      }
     }
   };
 

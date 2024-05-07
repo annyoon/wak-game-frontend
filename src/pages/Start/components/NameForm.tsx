@@ -50,15 +50,20 @@ export default function NicknameForm() {
     } else {
       try {
         const fetchedData = await login(nickname);
-        if (fetchedData.success) {
-          setUserData({ nickname: nickname, color: fetchedData.data.color });
-          navigate('/lobby');
-        } else {
+        setUserData({
+          nickname: nickname,
+          color: fetchedData.data.color,
+          token: fetchedData.data.token,
+        });
+        navigate('/lobby');
+      } catch (error: any) {
+        const { message } = error.response.data.error.apierror;
+        if (message === 'USER IS ALREADY FOUND') {
           setMessage('DUPLICATED');
+        } else {
+          console.error('로그인 에러', error);
+          navigate('/error');
         }
-      } catch (error) {
-        console.error('로그인 에러', error);
-        navigate('/error');
       }
     }
   };
@@ -71,7 +76,7 @@ export default function NicknameForm() {
         <SmallText>
           {message === 'INVALID_LENGTH'
             ? `닉네임은 6자 이하로 입력해 주세요`
-            : `이미 사용 중인 닉네임이에요 ㅠ_ㅠ)a`}
+            : `이미 사용 중인 닉네임이에요 ,_.)o`}
         </SmallText>
       )}
       <FormBlock gap='1rem'>

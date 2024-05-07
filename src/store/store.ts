@@ -10,7 +10,7 @@ interface Store {
 const useUserStore = create(
   persist<Store>(
     (set) => ({
-      userData: { nickname: '', color: '' } as UserDataType,
+      userData: { nickname: '', color: '', token: null } as UserDataType,
       setUserData: (userData: UserDataType) => set(() => ({ userData })),
     }),
     {

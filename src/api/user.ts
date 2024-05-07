@@ -1,11 +1,7 @@
-import axios from 'axios';
-
-export const baseAPI = axios.create({
-  baseURL: process.env.REACT_APP_BASE_URL,
-});
+import { axiosInstance } from './baseInstance';
 
 export const login = async (nickname: string) => {
-  const response = await baseAPI.post(
+  const response = await axiosInstance.post(
     `/users`,
     {
       nickname: nickname,
