@@ -1,10 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-
-interface UserDataType {
-  nickname: string;
-  color: string;
-}
+import { UserDataType } from '../types/UserTypes.ts';
 
 interface Store {
   userData: UserDataType;
