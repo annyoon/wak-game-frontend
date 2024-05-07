@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../../api/user';
+import useUserStore from '../../../store/store';
 
 import styled, { keyframes } from 'styled-components';
 import { SmallText } from '../../../styles/fonts';
@@ -35,6 +36,7 @@ export default function NicknameForm() {
   const [message, setMessage] = useState<
     'NO_INPUT' | 'INVALID_LENGTH' | 'DUPLICATED'
   >('NO_INPUT');
+  const { setUserData } = useUserStore();
 
   const handleChange = (e: { target: { value: string } }) => {
     setNickname(e.target.value);
@@ -49,7 +51,7 @@ export default function NicknameForm() {
       try {
         const fetchedData = await login(nickname);
         if (fetchedData.success) {
-          console.log(nickname);
+          setUserData({ nickname: nickname, color: fetchedData.data.color });
           navigate('/lobby');
         } else {
           setMessage('DUPLICATED');
