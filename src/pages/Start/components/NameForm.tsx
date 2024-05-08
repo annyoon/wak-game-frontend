@@ -55,14 +55,14 @@ export default function NicknameForm() {
           color: fetchedData.data.color,
           token: fetchedData.data.token,
         });
-        navigate('/lobby');
+        navigate(`/lobby`);
       } catch (error: any) {
         const { message } = error.response.data.error.apierror;
         if (message === 'USER IS ALREADY FOUND') {
           setMessage('DUPLICATED');
         } else {
           console.error('로그인 에러', error);
-          navigate('/error');
+          navigate(`/error`);
         }
       }
     }
