@@ -22,3 +22,12 @@ export const createRoom = async (
   );
   return response.data;
 };
+
+export const getRoomInfo = async (roomId: number) => {
+  const response = await axiosInstance.get(`/rooms/topic/${roomId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
