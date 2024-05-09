@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../../api/user';
+import { login } from '../../../services/user';
 import useUserStore from '../../../store/store';
 
 import styled, { keyframes } from 'styled-components';

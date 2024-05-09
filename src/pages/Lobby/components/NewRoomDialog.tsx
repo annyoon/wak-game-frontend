@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { createRoom } from '../../../api/room';
+import { createRoom } from '../../../services/room';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
