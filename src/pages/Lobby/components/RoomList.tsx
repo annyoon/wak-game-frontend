@@ -1,6 +1,8 @@
+import { RoomListTypes } from '../../../types/RoomListTypes';
+
 import styled, { css } from 'styled-components';
 import { FlexLayout, GridLayout } from '../../../styles/layout';
-import { LargeText } from '../../../styles/fonts';
+import { LargeText, SmallText } from '../../../styles/fonts';
 
 import WhiteRoundBox from '../../../components/WhiteRoundBox';
 
@@ -24,15 +26,25 @@ const PageButton = styled.button<{ $right?: boolean }>`
     `};
 `;
 
-export default function RoomList() {
+type RoomListProps = {
+  rooms: RoomListTypes[];
+};
+
+export default function RoomList({ rooms }: RoomListProps) {
   const ROOM_NUM_SINGLE_PAGE = 6;
-  const rooms = Array.from({ length: ROOM_NUM_SINGLE_PAGE });
+  const roomBlocks = Array.from({ length: ROOM_NUM_SINGLE_PAGE });
 
   return (
     <FlexLayout $isCol gap='3.6rem'>
       <GridLayout $col={2} gap='2.4rem'>
-        {rooms.map((value, index) => {
-          return <WhiteRoundBox key={index} width='36rem'></WhiteRoundBox>;
+        {roomBlocks.map((_, index) => {
+          return (
+            <WhiteRoundBox key={index} width='36rem'>
+              {index < rooms.length && (
+                <SmallText>{rooms[index].roomName}</SmallText>
+              )}
+            </WhiteRoundBox>
+          );
         })}
       </GridLayout>
       <FlexLayout gap='8rem'>

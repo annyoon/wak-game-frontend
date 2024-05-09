@@ -1,4 +1,22 @@
-import { axiosInstance } from './baseInstance';
+import { axiosInstance } from './base';
+
+export const getRoomlist = async () => {
+  const response = await axiosInstance.get(`/rooms/topic/lobby`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
+
+export const getRoomInfo = async (roomId: number) => {
+  const response = await axiosInstance.get(`/rooms/topic/${roomId}`, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+  return response.data;
+};
 
 export const createRoom = async (
   room_name: string,
@@ -20,14 +38,5 @@ export const createRoom = async (
       },
     }
   );
-  return response.data;
-};
-
-export const getRoomInfo = async (roomId: number) => {
-  const response = await axiosInstance.get(`/rooms/topic/${roomId}`, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
   return response.data;
 };
