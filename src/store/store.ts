@@ -11,7 +11,8 @@ const useUserStore = create(
   persist<Store>(
     (set) => ({
       userData: { nickname: '', color: '', token: null } as UserDataType,
-      setUserData: (userData: UserDataType) => set(() => ({ userData })),
+      setUserData: (userData: UserDataType) =>
+        set(() => ({ userData: { ...userData } })),
     }),
     {
       name: 'userStore',

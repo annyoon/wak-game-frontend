@@ -28,6 +28,8 @@ const ExclamationImg = styled.img.attrs({
   width: 5.2rem;
   height: fit-content;
   position: absolute;
+  top: 0.4rem;
+  left: -6rem;
 `;
 
 export default function NicknameForm() {
