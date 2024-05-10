@@ -93,7 +93,7 @@ export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
       try {
         const { title, players, password, mode } = info;
         const fetchedData = await createRoom(title, players, password, mode);
-        navigate(`/room/${fetchedData.data.room_id}`);
+        navigate(`/room/${fetchedData.data.roomId}`);
       } catch (error: any) {
         console.error('방 만들기 에러', error);
         navigate(`/error`);

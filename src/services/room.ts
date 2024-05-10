@@ -19,17 +19,17 @@ export const getRoomInfo = async (roomId: number) => {
 };
 
 export const createRoom = async (
-  room_name: string,
-  limit_players: number,
-  room_password: string,
+  roomName: string,
+  limitPlayers: number,
+  roomPassword: string,
   mode: string
 ) => {
   const response = await axiosInstance.post(
     `/rooms`,
     {
-      room_name: room_name,
-      room_password: room_password,
-      limit_players: limit_players,
+      roomName: roomName,
+      roomPassword: roomPassword,
+      limitPlayers: limitPlayers,
       mode: mode,
     },
     {
