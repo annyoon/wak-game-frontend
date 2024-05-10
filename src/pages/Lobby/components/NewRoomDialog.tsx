@@ -5,7 +5,6 @@ import { createRoom } from '../../../services/room';
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
 import { RegularText, SmallText, textStyles } from '../../../styles/fonts';
-
 import Dialog from '../../../components/Dialog';
 import Input from '../../../components/Input';
 import CheckboxInput from '../../../components/CheckboxInput';
@@ -102,7 +101,7 @@ export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
   };
 
   return (
-    <Dialog isOpen onClose={closeDialog}>
+    <Dialog mode='TALL' isOpen onClose={closeDialog}>
       <DialogTitle color='black'>{`₊‧.°.⋆ 새로운 방 •˚₊‧⋆.`}</DialogTitle>
       <ContentBlock $isCol gap='4.8rem'>
         <InputBlock gap='1rem'>

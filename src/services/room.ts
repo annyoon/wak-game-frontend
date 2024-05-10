@@ -40,3 +40,18 @@ export const createRoom = async (
   );
   return response.data;
 };
+
+export const enterRoom = async (roomId: number, roomPassword: string) => {
+  const response = await axiosInstance.post(
+    `/rooms/${roomId}`,
+    {
+      roomPassword: roomPassword,
+    },
+    {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+  return response.data;
+};

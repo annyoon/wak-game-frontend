@@ -13,14 +13,22 @@ import ChatBox from '../../components/ChatBox';
 import LobbyHeader from './components/LobbyHeader';
 import RoomList from './components/RoomList';
 import NewRoomDialog from './components/NewRoomDialog';
+import EnterCheckDialog from './components/EnterCheckDialog';
 
 export default function LobbyPage() {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const client = useRef<CompatClient | null>(null);
 
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState({
+    newRoomDialog: false,
+    enterCheckDialog: false,
+  });
   const [roomPage, setRoomPage] = useState<{ rooms: [] } | null>(null);
+  const [clickedRoom, setClickedRoom] = useState({
+    roomId: 0,
+    isPublic: false,
+  });
 
   const connectHandler = () => {
     const socket = new SockJS(`${BASE_URL}/socket`);
@@ -56,20 +64,42 @@ export default function LobbyPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
 
+  const handleCheckDialog = (id: number, isPublic: boolean) => {
+    setClickedRoom({ roomId: id, isPublic: isPublic });
+    setIsOpen({ ...isOpen, enterCheckDialog: true });
+  };
+
   return (
     <>
       <Background>
         <FlexLayout gap='4rem'>
           <FlexLayout $isCol gap='3.2rem'>
-            <LobbyHeader openDialog={() => setIsOpen(true)} />
-            <RoomList rooms={roomPage?.rooms || []} />
+            <LobbyHeader
+              openDialog={() => setIsOpen({ ...isOpen, newRoomDialog: true })}
+            />
+            <RoomList
+              rooms={roomPage?.rooms || []}
+              openDialog={(id: number, isPublic: boolean) =>
+                handleCheckDialog(id, isPublic)
+              }
+            />
           </FlexLayout>
           <div>
             <ChatBox text={`전체 채팅`} />
           </div>
         </FlexLayout>
       </Background>
-      {isOpen && <NewRoomDialog closeDialog={() => setIsOpen(false)} />}
+      {isOpen.newRoomDialog && (
+        <NewRoomDialog
+          closeDialog={() => setIsOpen({ ...isOpen, newRoomDialog: false })}
+        />
+      )}
+      {isOpen.enterCheckDialog && (
+        <EnterCheckDialog
+          clickedRoom={clickedRoom}
+          closeDialog={() => setIsOpen({ ...isOpen, enterCheckDialog: false })}
+        />
+      )}
     </>
   );
 }
