@@ -57,6 +57,8 @@ export default function RoomList({ rooms, openDialog }: RoomListProps) {
       openDialog(rooms[index].roomId, rooms[index].isPublic);
     }
   };
+  const clickRight = () => {};
+  const clickLeft = () => {};
 
   const RoomBlock = (index: number) => {
     return (
@@ -93,9 +95,9 @@ export default function RoomList({ rooms, openDialog }: RoomListProps) {
         })}
       </GridLayout>
       <FlexLayout gap='8rem'>
-        <PageButton />
+        <PageButton onClick={clickLeft} />
         <LargeText>1</LargeText>
-        <PageButton $right />
+        <PageButton $right onClick={clickRight} />
       </FlexLayout>
     </FlexLayout>
   );

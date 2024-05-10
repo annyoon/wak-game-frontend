@@ -24,7 +24,10 @@ export default function LobbyPage() {
     newRoomDialog: false,
     enterCheckDialog: false,
   });
-  const [roomPage, setRoomPage] = useState<{ rooms: [] } | null>(null);
+  const [roomPage, setRoomPage] = useState<{
+    totalPage: number;
+    rooms: [];
+  } | null>(null);
   const [clickedRoom, setClickedRoom] = useState({
     roomId: 0,
     isPublic: false,
@@ -45,8 +48,16 @@ export default function LobbyPage() {
         },
         header
       );
-
       showRoomList();
+      // Array.from({ length: roomPage?.totalPage || 1 }).forEach((_, page) => {
+      //   client.current?.subscribe(
+      //     `/topic/lobby/${page + 1}`,
+      //     (message) => {
+      //       setRoomPage(JSON.parse(message.body));
+      //     },
+      //     header
+      //   );
+      // });
     });
   };
 
