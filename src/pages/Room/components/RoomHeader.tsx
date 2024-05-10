@@ -26,6 +26,7 @@ const LockImg = styled.img.attrs({
 
 type RoomHeaderProps = {
   roomName: string;
+  currentPlayers: number;
   limitPlayers: number;
   isPublic: boolean;
   isHost: boolean;
@@ -33,6 +34,7 @@ type RoomHeaderProps = {
 
 export default function RoomHeader({
   roomName,
+  currentPlayers,
   limitPlayers,
   isPublic,
   isHost,
@@ -46,8 +48,8 @@ export default function RoomHeader({
             <SmallText>{`방장이 게임을 시작하기를 기다리는 중입니다 ...`}</SmallText>
           </StateBlock>
         )}
-        <RegularText>{`현재 방 이름 :${roomName}`}</RegularText>
-        <RegularText>{`참가자 수 : 22 / ${limitPlayers} 명`}</RegularText>
+        <RegularText>{`현재 방 이름 : ${roomName}`}</RegularText>
+        <RegularText>{`참가자 수 : ${currentPlayers} / ${limitPlayers} 명`}</RegularText>
       </TextBlock>
       <LockImg
         src={

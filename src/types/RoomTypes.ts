@@ -18,17 +18,18 @@ export type RoomInfoTypes = {
   isHost: boolean;
 };
 
+export type PlayerTypes = {
+  userId: number;
+  nickname: string;
+  color: string;
+  team: string;
+  isHost: boolean;
+};
+
 export type RoomPlayTypes = {
   roomId: number;
   hostId: number;
   currentPlayers: number;
   start: boolean;
-  users: [
-    {
-      userId: number;
-      nickname: string;
-      color: string;
-      team: string;
-    }
-  ];
+  users: PlayerTypes[];
 };
