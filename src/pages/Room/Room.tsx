@@ -5,7 +5,7 @@ import { CompatClient, Stomp } from '@stomp/stompjs';
 
 import { BASE_URL, getAccessToken } from '../../constants/api';
 import { getRoomInfo } from '../../services/room';
-import { RoomInfoTypes } from '../../types/RoomInfoTypes';
+import useRoomStore from '../../store/roomStore';
 
 import { FlexLayout } from '../../styles/layout';
 
@@ -20,9 +20,8 @@ export default function RoomPage() {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const { id } = useParams();
+  const { roomData, setRoomData } = useRoomStore();
   const client = useRef<CompatClient | null>(null);
-
-  const [roomInfo, setRoomInfo] = useState<RoomInfoTypes | null>(null);
 
   const connectHandler = () => {
     const socket = new SockJS(`${BASE_URL}/socket`);
@@ -45,16 +44,11 @@ export default function RoomPage() {
     });
   };
 
-  useEffect(() => {
-    connectHandler();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
-
   const showRoomInfo = async () => {
     try {
       const fetchedData = id && (await getRoomInfo(parseInt(id)));
       console.log(fetchedData);
-      setRoomInfo({ ...fetchedData.data });
+      setRoomData(fetchedData.data);
     } catch (error: any) {
       console.error('방 정보 가져오기 에러', error);
       navigate(`/error`);
@@ -62,7 +56,7 @@ export default function RoomPage() {
   };
 
   useEffect(() => {
-    showRoomInfo();
+    connectHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
@@ -71,16 +65,16 @@ export default function RoomPage() {
       <FlexLayout gap='4rem'>
         <FlexLayout $isCol gap='2.8rem'>
           <RoomHeader
-            roomName={roomInfo?.roomName || ''}
-            limitPlayers={roomInfo?.limitPlayers || 0}
-            isPublic={roomInfo?.isPublic || false}
-            isHost={roomInfo?.isHost || false}
+            roomName={roomData.roomName}
+            limitPlayers={roomData.limitPlayers}
+            isPublic={roomData.isPublic}
+            isHost={roomData.isHost}
           />
           <FlexLayout $isCol gap='1.6rem'>
-            <PlayerList isHost={roomInfo?.isHost || false} />
-            {roomInfo?.isHost && <RoomSetting />}
+            <PlayerList isHost={roomData.isHost} />
+            {roomData.isHost && <RoomSetting />}
           </FlexLayout>
-          <ButtonGroup isHost={roomInfo?.isHost || false} />
+          <ButtonGroup isHost={roomData.isHost} />
         </FlexLayout>
         <div>
           <ChatBox text={`방 채팅`} />

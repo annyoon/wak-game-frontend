@@ -1,8 +1,5 @@
-import { UserDataType } from '../../../types/UserTypes.ts';
-
 import styled, { css } from 'styled-components';
 import { RegularText } from '../../../styles/fonts';
-import { FlexLayout } from '../../../styles/layout';
 
 import NewRoomButton from './NewRoomButton';
 

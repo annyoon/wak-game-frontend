@@ -1,4 +1,4 @@
-import { RoomListTypes } from '../../../types/RoomListTypes';
+import { RoomListTypes } from '../../../types/RoomTypes';
 
 import styled, { css } from 'styled-components';
 import { FlexLayout, GridLayout } from '../../../styles/layout';

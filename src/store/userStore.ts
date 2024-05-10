@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import { UserDataType } from '../types/UserTypes.ts';
+import { UserDataType } from '../types/UserTypes.ts.js';
 
 interface Store {
   userData: UserDataType;
