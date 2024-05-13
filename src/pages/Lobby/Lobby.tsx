@@ -1,10 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import SockJS from 'sockjs-client';
-import { CompatClient, Stomp } from '@stomp/stompjs';
-
-import { BASE_URL, CHAT_URL, getAccessToken } from '../../constants/api';
-import { getRoomlist } from '../../services/room';
+import { useState } from 'react';
 
 import { FlexLayout } from '../../styles/layout';
 
@@ -16,50 +10,15 @@ import NewRoomDialog from './components/NewRoomDialog';
 import EnterCheckDialog from './components/EnterCheckDialog';
 
 export default function LobbyPage() {
-  const navigate = useNavigate();
-  const ACCESS_TOKEN = getAccessToken();
-  const client = useRef<CompatClient | null>(null);
-
   const [isOpen, setIsOpen] = useState({
     newRoomDialog: false,
     enterCheckDialog: false,
   });
-  const [roomPage, setRoomPage] = useState<{ rooms: [] } | null>(null);
   const [clickedRoom, setClickedRoom] = useState({
     roomId: 0,
     isPublic: false,
   });
-
-  const connectHandler = () => {
-    const socket = new SockJS(`${BASE_URL}/socket`);
-    const header = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
-    client.current = Stomp.over(socket);
-    client.current.connect(header, () => {
-      client.current?.subscribe(
-        `/topic/lobby/1`,
-        (message) => {
-          setRoomPage(JSON.parse(message.body));
-        },
-        header
-      );
-
-      showRoomList();
-    });
-  };
-
-  const showRoomList = async () => {
-    try {
-      await getRoomlist();
-    } catch (error: any) {
-      console.error('방 목록 가져오기 에러', error);
-      navigate(`/error`);
-    }
-  };
-
-
+  
   const handleCheckDialog = (id: number, isPublic: boolean) => {
     setClickedRoom({ roomId: id, isPublic: isPublic });
     setIsOpen({ ...isOpen, enterCheckDialog: true });
@@ -74,7 +33,6 @@ export default function LobbyPage() {
               openDialog={() => setIsOpen({ ...isOpen, newRoomDialog: true })}
             />
             <RoomList
-              rooms={roomPage?.rooms || []}
               openDialog={(id: number, isPublic: boolean) =>
                 handleCheckDialog(id, isPublic)
               }
