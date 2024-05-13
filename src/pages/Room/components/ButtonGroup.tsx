@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { exitRoom } from '../../../services/room';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
@@ -15,12 +16,20 @@ type ButtonGroupProps = {
 
 export default function ButtonGroup({ isHost }: ButtonGroupProps) {
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const handleStart = () => {
     navigate(`/game`);
   };
 
-  const hanndleBack = () => {
+  const hanndleBack = async () => {
+    try {
+      id && (await exitRoom(parseInt(id)));
+    } catch (error: any) {
+      console.error('방 나가기 에러', error);
+      navigate(`/error`);
+    }
+
     navigate(`/lobby`, { replace: true });
   };
 

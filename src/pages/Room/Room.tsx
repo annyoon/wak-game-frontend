@@ -7,7 +7,6 @@ import { getRoomInfo } from '../../services/room';
 import { BASE_URL, getAccessToken } from '../../constants/api';
 import { RoomPlayTypes } from '../../types/RoomTypes';
 import useRoomStore from '../../store/roomStore';
-import useWebSocketStore from '../../store/websocketStore';
 
 import { FlexLayout } from '../../styles/layout';
 import Background from '../../components/Background';
@@ -20,37 +19,30 @@ import ButtonGroup from './components/ButtonGroup';
 export default function RoomPage() {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
-  const { id } = useParams();
-
-  const { roomData, setRoomData } = useRoomStore();
-  const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
-  // const client = useRef<CompatClient | null>(null);
-  const { connect, disconnect, client } = useWebSocketStore();
-
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     'Content-Type': 'application/json',
   };
+  const { id } = useParams();
+  const { roomData, setRoomData } = useRoomStore();
+  const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
+  const clientRef = useRef<CompatClient | null>(null);
 
-  // const connectHandler = () => {
-  //   const socket = new SockJS(`${BASE_URL}/socket`);
-  //   const header = {
-  //     Authorization: `Bearer ${ACCESS_TOKEN}`,
-  //     'Content-Type': 'application/json',
-  //   };
-  //   client.current = Stomp.over(socket);
-  //   client.current.connect(header, () => {
-  //     client.current?.subscribe(
-  //       `/topic/rooms/${id}`,
-  //       (message) => {
-  //         setPlayInfo(JSON.parse(message.body));
-  //       },
-  //       header
-  //     );
+  const connectHandler = () => {
+    const socket = new SockJS(`${BASE_URL}/socket`);
+    clientRef.current = Stomp.over(socket);
+    clientRef.current.connect(header, () => {
+      clientRef.current?.subscribe(
+        `/topic/rooms/${id}`,
+        (message) => {
+          setPlayInfo(JSON.parse(message.body));
+        },
+        header
+      );
 
-  //     showRoomInfo();
-  //   });
-  // };
+      showRoomInfo();
+    });
+  };
 
   const showRoomInfo = async () => {
     try {
@@ -63,20 +55,14 @@ export default function RoomPage() {
   };
 
   useEffect(() => {
-    connect();
-    client.current?.subscribe(
-      `/topic/rooms/${id}`,
-      (message) => {
-        setPlayInfo(JSON.parse(message.body));
-        showRoomInfo();
-      },
-      header
-    );
+    connectHandler();
     return () => {
-      disconnect();
+      clientRef.current?.disconnect(() => {
+        clientRef.current?.unsubscribe(`/topic/rooms/${id}`);
+      }, header);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [ACCESS_TOKEN]);
 
   return (
     <Background>
