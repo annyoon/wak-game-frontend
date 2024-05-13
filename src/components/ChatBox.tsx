@@ -44,9 +44,14 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     'Content-Type': 'application/json',
   };
+  const storage = window.sessionStorage;
+  const chattingData = storage.getItem('chattingData');
+
   const { userData } = useUserStore();
   const [chatting, setChatting] = useState('');
-  const [userChatting, setUserChatting] = useState<string[][]>([]);
+  const [userChatting, setUserChatting] = useState<string[][]>(
+    chattingData ? JSON.parse(chattingData) : []
+  );
   const clientRef = useRef<CompatClient | null>(null);
 
   const handleChange = (e: { target: { value: string } }) => {
@@ -82,6 +87,11 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
       );
     });
   };
+
+  useEffect(() => {
+    storage.setItem('chattingData', JSON.stringify(userChatting));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userChatting]);
 
   useEffect(() => {
     connectChatHandler();
