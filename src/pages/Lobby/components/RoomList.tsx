@@ -10,9 +10,16 @@ import { LargeText, SmallText, textStyles } from '../../../styles/fonts';
 import WhiteRoundBox from '../../../components/WhiteRoundBox';
 
 import arrow from '../../../assets/img-arrow.png';
+import Button from '../../../components/Button';
 
 const ListBlock = styled(FlexLayout)`
   position: relative;
+`;
+
+const ReloadBlock = styled.div`
+  position: absolute;
+  top: -6.8rem;
+  left: 31.6rem;
 `;
 
 const TextBlock = styled(FlexLayout)`
@@ -89,6 +96,10 @@ export default function RoomList({ openDialog }: RoomListProps) {
       openDialog(rooms[index].roomId, rooms[index].isPublic);
     }
   };
+  const clickReload = () => {
+    showRoomList();
+    setCurrentPage(1);
+  };
   const clickRight = () => {
     if (currentPage < totalPage) {
       setCurrentPage(currentPage + 1);
@@ -129,6 +140,9 @@ export default function RoomList({ openDialog }: RoomListProps) {
 
   return (
     <ListBlock $isCol gap='3.6rem'>
+      <ReloadBlock>
+        <Button label={`⟳`} onClick={clickReload} />
+      </ReloadBlock>
       <GridLayout $col={2} gap='2.4rem'>
         {roomBlocks.map((_, index) => {
           const roomsIndex = index + (currentPage - 1) * ROOM_NUM_SINGLE_PAGE;
