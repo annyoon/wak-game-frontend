@@ -85,7 +85,7 @@ export default function RoomPage() {
           <ButtonGroup isHost={roomData.isHost} />
         </FlexLayout>
         <div>
-          <ChatBox text={`방 채팅`} />
+          <ChatBox mode='ROOM' text={`방 채팅`} />
         </div>
       </FlexLayout>
     </Background>

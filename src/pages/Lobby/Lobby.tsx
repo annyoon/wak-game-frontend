@@ -18,7 +18,7 @@ export default function LobbyPage() {
     roomId: 0,
     isPublic: false,
   });
-  
+
   const handleCheckDialog = (id: number, isPublic: boolean) => {
     setClickedRoom({ roomId: id, isPublic: isPublic });
     setIsOpen({ ...isOpen, enterCheckDialog: true });
@@ -39,7 +39,7 @@ export default function LobbyPage() {
             />
           </FlexLayout>
           <div>
-            <ChatBox text={`전체 채팅`} />
+            <ChatBox mode='LOBBY' text={`전체 채팅`} />
           </div>
         </FlexLayout>
       </Background>

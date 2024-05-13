@@ -13,6 +13,7 @@ import WhiteBox from './WhiteBox';
 import GrayTitleBox from './GrayTitleBox';
 import Input from './Input';
 import Button from './Button';
+import { useParams } from 'react-router-dom';
 
 const ChatBlock = styled.div<{ height: string }>`
   width: 32rem;
@@ -34,11 +35,12 @@ const ChatText = styled.div`
 `;
 
 type ChatBoxProps = {
+  mode: 'LOBBY' | 'ROOM';
   isShort?: boolean;
   text: string;
 };
 
-export default function ChatBox({ isShort, text }: ChatBoxProps) {
+export default function ChatBox({ mode, isShort, text }: ChatBoxProps) {
   const ACCESS_TOKEN = getAccessToken();
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -54,6 +56,23 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
   );
   const clientRef = useRef<CompatClient | null>(null);
 
+  let url: string;
+  const id = useParams();
+  const changeMode = () => {
+    if (storage.getItem('mode') !== mode) {
+      storage.removeItem('chattingData');
+      storage.setItem('mode', mode);
+    }
+  };
+
+  if (mode === 'LOBBY') {
+    url = 'lobby-chat';
+    changeMode();
+  } else {
+    url = `chats/${id}`;
+    changeMode();
+  }
+
   const handleChange = (e: { target: { value: string } }) => {
     setChatting(e.target.value);
   };
@@ -64,7 +83,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
       nickname: userData.nickname,
       color: userData.color,
     });
-    clientRef.current?.send(`/topic/lobby-chat`, header, message);
+    clientRef.current?.send(`/topic/${url}`, header, message);
   };
 
   const connectChatHandler = () => {
@@ -72,7 +91,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     clientRef.current = Stomp.over(socket);
     clientRef.current.connect(header, () => {
       clientRef.current?.subscribe(
-        `/topic/lobby-chat`,
+        `/topic/${url}`,
         (message) => {
           const fetchedData = JSON.parse(message.body);
           setUserChatting((prevChatting) => {
@@ -97,7 +116,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     connectChatHandler();
     return () => {
       clientRef.current?.disconnect(() => {
-        clientRef.current?.unsubscribe(`/topic/lobby-chat`);
+        clientRef.current?.unsubscribe(`/topic/${url}`);
       }, header);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps

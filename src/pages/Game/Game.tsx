@@ -23,11 +23,11 @@ export default function GamePage() {
           ) : state === 'PLAY' ? (
             <GamePlay />
           ) : (
-            <GameResult isWinner round={3}/>
+            <GameResult isWinner round={3} />
           )}
         </FlexLayout>
         <FlexLayout $isCol gap='1.2rem'>
-          <ChatBox isShort text={`방 채팅`} />
+          <ChatBox mode='ROOM' isShort text={`방 채팅`} />
           <RankBox />
         </FlexLayout>
       </FlexLayout>
