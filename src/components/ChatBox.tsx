@@ -1,9 +1,9 @@
-import { useState, useRef, useEffect} from 'react';
+import { useState, useRef, useEffect } from 'react';
 import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
-import useUserStore from '../store/userStore';
 
 import { CHAT_URL, getAccessToken } from '../constants/api';
+import useUserStore from '../store/userStore';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../styles/layout';
@@ -39,34 +39,42 @@ type ChatBoxProps = {
 };
 
 export default function ChatBox({ isShort, text }: ChatBoxProps) {
-  const [userChatting, setUserChatting] = useState<string[][]>([]);
-  const [chatting, setChatting] = useState('');
-  const { userData } = useUserStore();
-  const client = useRef<CompatClient | null>(null);
   const ACCESS_TOKEN = getAccessToken();
+  const header = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json',
+  };
+  const { userData } = useUserStore();
+  const [chatting, setChatting] = useState('');
+  const [userChatting, setUserChatting] = useState<string[][]>([]);
+  const clientRef = useRef<CompatClient | null>(null);
 
   const handleChange = (e: { target: { value: string } }) => {
     setChatting(e.target.value);
   };
 
   const handleClick = () => {
-    sendChatMessage(chatting);
+    const message = JSON.stringify({
+      text: chatting,
+      nickname: userData.nickname,
+      color: userData.color,
+    });
+    clientRef.current?.send(`/topic/lobby-chat`, header, message);
   };
 
   const connectChatHandler = () => {
     const socket = new SockJS(`${CHAT_URL}/socket`);
-    const header = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
-    client.current = Stomp.over(socket);
-    client.current.connect(header, () => {
-      client.current?.subscribe(
+    clientRef.current = Stomp.over(socket);
+    clientRef.current.connect(header, () => {
+      clientRef.current?.subscribe(
         `/topic/lobby-chat`,
         (message) => {
           const fetchedData = JSON.parse(message.body);
-          setUserChatting(prevChatting => {
-            const newChatting = [...prevChatting, [fetchedData.nickname, fetchedData.text]];
+          setUserChatting((prevChatting) => {
+            const newChatting = [
+              ...prevChatting,
+              [fetchedData.color, fetchedData.nickname, fetchedData.text],
+            ];
             return newChatting;
           });
         },
@@ -75,37 +83,26 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     });
   };
 
-  const sendChatMessage = (chatting: string) => {
-    const socket = new SockJS(`${CHAT_URL}/socket`);
-    const header = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
-    const message = JSON.stringify({ text: chatting, nickname: userData.nickname, color: userData.color });
-    client.current = Stomp.over(socket);
-    client.current.connect(header, () => {
-      client.current?.send(
-        `/topic/lobby-chat`,
-        header,
-        message
-      );
-    });
-  };
-
   useEffect(() => {
     connectChatHandler();
+    return () => {
+      clientRef.current?.disconnect(() => {
+        clientRef.current?.unsubscribe(`/topic/lobby-chat`);
+      }, header);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ACCESS_TOKEN]);
+  }, []);
 
   return (
     <WhiteBox mode={isShort ? 'MEDIUM' : 'TALL'} width='32rem'>
       <GrayTitleBox text={text} />
       <ChatBlock height={isShort ? '15.2rem' : '45.2rem'}>
         {userChatting.map((value, index) => {
+          const [color, nickname, text] = value;
           return (
             <ChatLine key={index}>
-              <ChatText color={userData.color}>{`${value[0]}`}</ChatText>
-              <ChatText>{`: ${value[1]}`}</ChatText>
+              <ChatText color={color}>{nickname}</ChatText>
+              <ChatText>{`: ${text}`}</ChatText>
             </ChatLine>
           );
         })}
