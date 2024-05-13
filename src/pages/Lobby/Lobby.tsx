@@ -18,7 +18,7 @@ export default function LobbyPage() {
     roomId: 0,
     isPublic: false,
   });
-
+  
   const handleCheckDialog = (id: number, isPublic: boolean) => {
     setClickedRoom({ roomId: id, isPublic: isPublic });
     setIsOpen({ ...isOpen, enterCheckDialog: true });
