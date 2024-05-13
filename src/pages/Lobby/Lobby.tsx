@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 
-import { BASE_URL, getAccessToken } from '../../constants/api';
+import { BASE_URL, CHAT_URL, getAccessToken } from '../../constants/api';
 import { getRoomlist } from '../../services/room';
 
 import { FlexLayout } from '../../styles/layout';
@@ -19,6 +19,7 @@ export default function LobbyPage() {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const client = useRef<CompatClient | null>(null);
+  const client2 = useRef<CompatClient | null>(null);
 
   const [isOpen, setIsOpen] = useState({
     newRoomDialog: false,
@@ -50,6 +51,25 @@ export default function LobbyPage() {
     });
   };
 
+  const connectChatHandler = () => {
+    console.log("CHAT URL" + CHAT_URL)
+    const socket = new SockJS(`${CHAT_URL}/socket`);
+    const header = {
+      Authorization: `Bearer ${ACCESS_TOKEN}`,
+      'Content-Type': 'application/json',
+    };
+    client2.current = Stomp.over(socket);
+    client2.current.connect(header, () => {
+      client2.current?.subscribe(
+        `/topic/lobby-chat`,
+        (message) => {
+          console.log("Received message:", message.body);
+        },
+        header
+      );
+    });
+  };
+
   const showRoomList = async () => {
     try {
       await getRoomlist();
@@ -61,6 +81,7 @@ export default function LobbyPage() {
 
   useEffect(() => {
     connectHandler();
+    connectChatHandler();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
 
