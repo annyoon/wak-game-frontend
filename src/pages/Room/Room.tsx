@@ -19,21 +19,20 @@ import ButtonGroup from './components/ButtonGroup';
 export default function RoomPage() {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
+  const header = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json',
+  };
   const { id } = useParams();
-
   const { roomData, setRoomData } = useRoomStore();
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
-  const client = useRef<CompatClient | null>(null);
+  const clientRef = useRef<CompatClient | null>(null);
 
   const connectHandler = () => {
     const socket = new SockJS(`${BASE_URL}/socket`);
-    const header = {
-      Authorization: `Bearer ${ACCESS_TOKEN}`,
-      'Content-Type': 'application/json',
-    };
-    client.current = Stomp.over(socket);
-    client.current.connect(header, () => {
-      client.current?.subscribe(
+    clientRef.current = Stomp.over(socket);
+    clientRef.current.connect(header, () => {
+      clientRef.current?.subscribe(
         `/topic/rooms/${id}`,
         (message) => {
           setPlayInfo(JSON.parse(message.body));
@@ -57,8 +56,13 @@ export default function RoomPage() {
 
   useEffect(() => {
     connectHandler();
+    return () => {
+      clientRef.current?.disconnect(() => {
+        clientRef.current?.unsubscribe(`/topic/rooms/${id}`);
+      }, header);
+    };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+  }, [ACCESS_TOKEN]);
 
   return (
     <Background>
