@@ -67,7 +67,7 @@ export default function ChatBox({ isShort, text, url }: ChatBoxProps) {
         (message) => {
           const fetchedData = JSON.parse(message.body);
           setUserChatting(prevChatting => {
-            const newChatting = [...prevChatting, [fetchedData.nickname, fetchedData.text]];
+            const newChatting = [...prevChatting, [fetchedData.nickname, fetchedData.text, fetchedData.color]];
             return newChatting;
           });
         },
@@ -105,7 +105,7 @@ export default function ChatBox({ isShort, text, url }: ChatBoxProps) {
         {userChatting.map((value, index) => {
           return (
             <ChatLine key={index}>
-              <ChatText color={userData.color}>{`${value[0]}`}</ChatText>
+              <ChatText color={value[2]}>{`${value[0]}`}</ChatText>
               <ChatText>{`: ${value[1]}`}</ChatText>
             </ChatLine>
           );
