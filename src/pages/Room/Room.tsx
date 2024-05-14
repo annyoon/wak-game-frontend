@@ -15,6 +15,7 @@ import RoomHeader from './components/RoomHeader';
 import PlayerList from './components/PlayerList';
 import RoomSetting from './components/RoomSetting';
 import ButtonGroup from './components/ButtonGroup';
+import StartCheckDialog from './components/StartCheckDialog';
 
 export default function RoomPage() {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function RoomPage() {
   };
   const { id } = useParams();
   const { roomData, setRoomData } = useRoomStore();
+  const [isOpen, setIsOpen] = useState(false);
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
   const clientRef = useRef<CompatClient | null>(null);
 
@@ -35,7 +37,11 @@ export default function RoomPage() {
       clientRef.current?.subscribe(
         `/topic/rooms/${id}`,
         (message) => {
-          setPlayInfo(JSON.parse(message.body));
+          const data = JSON.parse(message.body);
+          setPlayInfo(data);
+          if (data === 'DATA START') {
+            console.log('시작?');
+          }
         },
         header
       );
@@ -64,30 +70,44 @@ export default function RoomPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
 
+  const checkStart = () => {
+    if (playInfo) {
+      return playInfo.currentPlayers > 1;
+    }
+    return false;
+  };
+
   return (
-    <Background>
-      <FlexLayout gap='4rem'>
-        <FlexLayout $isCol gap='2.8rem'>
-          <RoomHeader
-            roomName={roomData.roomName}
-            currentPlayers={playInfo?.currentPlayers || 0}
-            limitPlayers={roomData.limitPlayers}
-            isPublic={roomData.isPublic}
-            isHost={roomData.isHost}
-          />
-          <FlexLayout $isCol gap='1.6rem'>
-            <PlayerList
+    <>
+      <Background>
+        <FlexLayout gap='4rem'>
+          <FlexLayout $isCol gap='2.8rem'>
+            <RoomHeader
+              roomName={roomData.roomName}
+              currentPlayers={playInfo?.currentPlayers || 0}
+              limitPlayers={roomData.limitPlayers}
+              isPublic={roomData.isPublic}
               isHost={roomData.isHost}
-              players={playInfo?.users || []}
             />
-            {roomData.isHost && <RoomSetting />}
+            <FlexLayout $isCol gap='1.6rem'>
+              <PlayerList
+                isHost={roomData.isHost}
+                players={playInfo?.users || []}
+              />
+              {roomData.isHost && <RoomSetting />}
+            </FlexLayout>
+            <ButtonGroup
+              isHost={roomData.isHost}
+              canStart={checkStart()}
+              openDialog={() => setIsOpen(true)}
+            />
           </FlexLayout>
-          <ButtonGroup isHost={roomData.isHost} />
+          <div>
+            <ChatBox mode='ROOM' text={`방 채팅`} />
+          </div>
         </FlexLayout>
-        <div>
-          <ChatBox mode='ROOM' text={`방 채팅`} />
-        </div>
-      </FlexLayout>
-    </Background>
+      </Background>
+      {isOpen && <StartCheckDialog closeDialog={() => setIsOpen(false)} />}
+    </>
   );
 }

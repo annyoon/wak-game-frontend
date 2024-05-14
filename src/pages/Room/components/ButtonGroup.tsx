@@ -12,14 +12,24 @@ const Layout = styled(FlexLayout)`
 
 type ButtonGroupProps = {
   isHost: boolean;
+  canStart: boolean;
+  openDialog: () => void;
 };
 
-export default function ButtonGroup({ isHost }: ButtonGroupProps) {
+export default function ButtonGroup({
+  isHost,
+  canStart,
+  openDialog,
+}: ButtonGroupProps) {
   const navigate = useNavigate();
   const { id } = useParams();
 
   const handleStart = () => {
-    navigate(`/game`);
+    if (canStart) {
+      navigate(`/game`);
+    } else {
+      openDialog();
+    }
   };
 
   const hanndleBack = async () => {
