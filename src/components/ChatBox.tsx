@@ -36,9 +36,10 @@ const ChatText = styled.div`
 type ChatBoxProps = {
   isShort?: boolean;
   text: string;
+  url: string;
 };
 
-export default function ChatBox({ isShort, text }: ChatBoxProps) {
+export default function ChatBox({ isShort, text, url }: ChatBoxProps) {
   const [userChatting, setUserChatting] = useState<string[][]>([]);
   const [chatting, setChatting] = useState('');
   const { userData } = useUserStore();
@@ -62,7 +63,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     client.current = Stomp.over(socket);
     client.current.connect(header, () => {
       client.current?.subscribe(
-        `/topic/lobby-chat`,
+        `/topic`+ url,
         (message) => {
           const fetchedData = JSON.parse(message.body);
           setUserChatting(prevChatting => {
@@ -85,7 +86,7 @@ export default function ChatBox({ isShort, text }: ChatBoxProps) {
     client.current = Stomp.over(socket);
     client.current.connect(header, () => {
       client.current?.send(
-        `/topic/lobby-chat`,
+        `/topic` + url,
         header,
         message
       );

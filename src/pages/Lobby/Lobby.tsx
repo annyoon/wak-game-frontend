@@ -81,7 +81,7 @@ export default function LobbyPage() {
             />
           </FlexLayout>
           <div>
-            <ChatBox text={`전체 채팅`} />
+            <ChatBox text={`전체 채팅`} url={`/lobby-chat`}/>
           </div>
         </FlexLayout>
       </Background>

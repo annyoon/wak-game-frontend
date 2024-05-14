@@ -27,7 +27,7 @@ export default function GamePage() {
           )}
         </FlexLayout>
         <FlexLayout $isCol gap='1.2rem'>
-          <ChatBox isShort text={`방 채팅`} />
+          <ChatBox isShort text={`방 채팅`} url={`/goNotion`} />
           <RankBox />
         </FlexLayout>
       </FlexLayout>
