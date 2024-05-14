@@ -15,19 +15,18 @@ const TextBlock = styled(FlexLayout)`
 export default function RoomSetting() {
   return (
     <GrayBox mode='SHORT' width='79.2rem'>
-      <TextBlock $isCol gap='1.2rem'>
-        <FlexLayout gap='1rem'>
-          <SmallText color='black'>{`방장은 관전하기`}</SmallText>
-          <CheckboxInput />
-        </FlexLayout>
-        <FlexLayout gap='1rem'>
-          <SmallText color='black'>{`게임 화면에서 닉네임 가리기`}</SmallText>
-          <CheckboxInput />
-        </FlexLayout>
-        <FlexLayout gap='1rem'>
-          <SmallText color='black'>{`1라운드 도발 멘트 입력`}</SmallText>
-          <Input name={''} width='40rem' />
-        </FlexLayout>
+      <TextBlock $isCol gap='1.6rem'>
+        <SmallText color='black'>{`방장 게임 룰 설정`}</SmallText>
+        <TextBlock $isCol gap='1.4rem'>
+          <FlexLayout gap='1rem'>
+            <SmallText color='black'>{`>> 게임 화면에서 닉네임 가리기`}</SmallText>
+            <CheckboxInput />
+          </FlexLayout>
+          <FlexLayout gap='1rem'>
+            <SmallText color='black'>{`>> 도발 멘트:`}</SmallText>
+            <Input name={''} width='52rem' />
+          </FlexLayout>
+        </TextBlock>
       </TextBlock>
     </GrayBox>
   );

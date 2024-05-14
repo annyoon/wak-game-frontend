@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
 
 import RoundButton from '../../../components/RoundButton';
+import { startGame } from '../../../services/game';
 
 const Layout = styled(FlexLayout)`
   place-self: end;
@@ -24,9 +25,15 @@ export default function ButtonGroup({
   const navigate = useNavigate();
   const { id } = useParams();
 
-  const handleStart = () => {
+  const handleStart = async () => {
     if (canStart) {
-      navigate(`/game`);
+      try {
+        // id && (await startGame(parseInt(id)));
+        // navigate(`/game/${id}`);
+      } catch (error: any) {
+        console.error('게임 시작 에러', error);
+        navigate(`/error`);
+      }
     } else {
       openDialog();
     }
