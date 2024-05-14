@@ -37,10 +37,12 @@ export default function RoomPage() {
       clientRef.current?.subscribe(
         `/topic/rooms/${id}`,
         (message) => {
-          const data = JSON.parse(message.body);
-          setPlayInfo(data);
-          if (data === 'DATA START') {
-            console.log('시작?');
+          if (message.body === 'ROOM IS EXPIRED') {
+            navigate(`/lobby`);
+          } else if (message.body === 'GAME START') {
+            navigate(`/game/${id}`);
+          } else {
+            setPlayInfo(JSON.parse(message.body));
           }
         },
         header
@@ -72,7 +74,7 @@ export default function RoomPage() {
 
   const checkStart = () => {
     if (playInfo) {
-      return playInfo.currentPlayers > 1;
+      return playInfo.currentPlayers > 2;
     }
     return false;
   };
