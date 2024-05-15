@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 
@@ -16,13 +17,15 @@ import GamePlay from './GamePlay/GamePlay';
 import GameResult from './GameResult/GameResult';
 
 export default function GamePage() {
+  const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     'Content-Type': 'application/json',
   };
-  const { gameData } = useGameStore();
+  const { gameData, setGameData } = useGameStore();
   const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('WAIT');
+  const [countdown, setCountdown] = useState(5);
   const clientRef = useRef<CompatClient | null>(null);
 
   const connectHandler = () => {
@@ -32,7 +35,12 @@ export default function GamePage() {
       clientRef.current?.subscribe(
         `/topic/games/${gameData.roundId}/battle-field`,
         (message) => {
-          // setPlayInfo(JSON.parse(message.body));
+          if (message.body === 'ROOM IS EXPIRED') {
+            navigate(`/lobby`);
+          } else {
+            const fetchedData = JSON.parse(message.body);
+            setGameData({ ...gameData, players: fetchedData.players });
+          }
         },
         header
       );
@@ -51,13 +59,24 @@ export default function GamePage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gameData.roundId]);
 
+  useEffect(() => {
+    if (countdown === 0) {
+      setState('PLAY');
+    } else {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [countdown]);
+
   return (
     <Background>
       <FlexLayout gap='4rem'>
         <FlexLayout $isCol gap='2rem'>
           <GameHeader clientRef={clientRef} />
           {state === 'WAIT' ? (
-            <GameWait />
+            <GameWait countdown={countdown} />
           ) : state === 'PLAY' ? (
             <GamePlay />
           ) : (
