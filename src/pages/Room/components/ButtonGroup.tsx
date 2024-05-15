@@ -1,12 +1,13 @@
 import { useNavigate, useParams } from 'react-router-dom';
 import { exitRoom } from '../../../services/room';
 import { startGame } from '../../../services/game';
+import useRoomStore from '../../../store/roomStore';
 import useGameStore from '../../../store/gameStore';
+import { PlayerTypes } from '../../../types/RoomTypes';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
 import RoundButton from '../../../components/RoundButton';
-import useRoomStore from '../../../store/roomStore';
 
 const Layout = styled(FlexLayout)`
   place-self: end;
@@ -15,12 +16,14 @@ const Layout = styled(FlexLayout)`
 type ButtonGroupProps = {
   isHost: boolean;
   canStart: boolean;
+  users: PlayerTypes[];
   openDialog: () => void;
 };
 
 export default function ButtonGroup({
   isHost,
   canStart,
+  users,
   openDialog,
 }: ButtonGroupProps) {
   const navigate = useNavigate();
@@ -42,8 +45,15 @@ export default function ButtonGroup({
           ...gameData,
           roundId: fetchedData.data.roundId,
           roomName: roomData.roomName,
+          players: users.map((user) => ({
+            roundId: fetchedData.data.roundId,
+            userId: user.userId,
+            nickname: user.nickname,
+            color: user.color,
+            team: user.team,
+            stamina: 1,
+          })),
         });
-        // navigate(`/game/${id}`);
       } catch (error: any) {
         console.error('게임 시작 에러', error);
         navigate(`/error`);

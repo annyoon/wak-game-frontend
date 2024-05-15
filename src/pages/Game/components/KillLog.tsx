@@ -4,12 +4,12 @@ import { textStyles } from '../../../styles/fonts';
 
 import WhiteRoundBox from '../../../components/WhiteRoundBox';
 
-const KillLogBlock = styled.div<{ isWaiting?: boolean }>`
+const KillLogBlock = styled.div<{ $isWaiting?: boolean }>`
   width: 100%;
   height: 90%;
   overflow-y: auto;
   ${(props) =>
-    props.isWaiting &&
+    props.$isWaiting &&
     css`
       display: flex;
       flex-direction: column;
@@ -35,7 +35,7 @@ export default function KillLog({ isWaiting }: KillLogProps) {
 
   return (
     <WhiteRoundBox width='32rem'>
-      <KillLogBlock isWaiting={isWaiting}>
+      <KillLogBlock $isWaiting={isWaiting}>
         {isWaiting ? (
           <TextBlock>
             <Text>{`Kill Log`}</Text>

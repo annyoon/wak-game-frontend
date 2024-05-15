@@ -32,29 +32,54 @@ export default function GameHeader({ clientRef }: GameHeaderProps) {
   };
   const { gameData } = useGameStore();
   const [info, setInfo] = useState({
-    roundNumber: 0,
-    totalCount: 0,
-    aliveCount: 0,
+    roundNumber: 1,
+    totalCount: gameData.players.length,
+    aliveCount: gameData.players.length,
   });
-
-  const subscription = () => {
-    clientRef.current?.subscribe(
-      `/topic/games/${gameData.roundId}/dashboard`,
-      (message) => {
-        setInfo(JSON.parse(message.body));
-      },
-      header
-    );
-  };
+  const [isSubscribed, setIsSubscribed] = useState(false);
 
   useEffect(() => {
-    subscription();
-    // return () =>
-    //   subscription?.unsubscribe(
-    //     `/topic/games/${gameData.roundId}/battle-field`
-    //   );
+    const subscribeToTopic = () => {
+      clientRef.current?.subscribe(
+        `/topic/games/${gameData.roundId}/dashboard`,
+        (message) => {
+          setInfo(JSON.parse(message.body));
+          console.log('데이터!!!');
+        },
+        header
+      );
+    };
+
+    if (clientRef.current && clientRef.current.connected) {
+      subscribeToTopic();
+      setIsSubscribed(true);
+    } else {
+      setIsSubscribed(false);
+    }
+
+    const connectCallback = () => {
+      if (clientRef.current) {
+        subscribeToTopic();
+        setIsSubscribed(true);
+      }
+    };
+
+    if (clientRef.current) {
+      clientRef.current.onConnect = connectCallback;
+    }
+
+    // return () => {
+    //   if (clientRef.current) {
+    //     clientRef.current.onConnect = null;
+    //     if (isSubscribed) {
+    //       clientRef.current.unsubscribe(
+    //         `/topic/games/${gameData.roundId}/dashboard`
+    //       );
+    //     }
+    //   }
+    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [clientRef, gameData.roundId, isSubscribed]);
 
   return (
     <HeaderBlock>

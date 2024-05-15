@@ -13,8 +13,10 @@ const useGameStore = create(
       gameData: {
         roundId: -1,
         roomName: '',
+        hostName: '',
         comment: '',
         showNickname: true,
+        players: [],
       } as GameTypes,
       setGameData: (gameData: GameTypes) =>
         set(() => ({ gameData: { ...gameData } })),
