@@ -67,16 +67,6 @@ export default function GameHeader({ clientRef }: GameHeaderProps) {
       clientRef.current.onConnect = connectCallback;
     }
 
-    // return () => {
-    //   if (clientRef.current) {
-    //     clientRef.current.onConnect = null;
-    //     if (isSubscribed) {
-    //       clientRef.current.unsubscribe(
-    //         `/topic/games/${gameData.roundId}/dashboard`
-    //       );
-    //     }
-    //   }
-    // };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [clientRef, gameData.roundId, isSubscribed]);
 

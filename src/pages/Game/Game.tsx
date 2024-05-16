@@ -76,9 +76,9 @@ export default function GamePage() {
         <FlexLayout $isCol gap='2rem'>
           <GameHeader clientRef={clientRef} />
           {state === 'WAIT' ? (
-            <GameWait countdown={countdown} />
+            <GameWait countdown={countdown} clientRef={clientRef} />
           ) : state === 'PLAY' ? (
-            <GamePlay />
+            <GamePlay clientRef={clientRef} />
           ) : (
             <GameResult isWinner round={3} />
           )}

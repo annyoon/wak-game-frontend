@@ -1,3 +1,5 @@
+import { CompatClient } from '@stomp/stompjs';
+
 import { FlexLayout } from '../../../styles/layout';
 
 import KillLog from '../components/KillLog';
@@ -6,16 +8,17 @@ import BattleFieldWait from './BattleFieldWait';
 
 type GameWaitProps = {
   countdown: number;
+  clientRef: React.MutableRefObject<CompatClient | null>;
 };
 
-export default function GameWait({ countdown }: GameWaitProps) {
+export default function GameWait({ countdown, clientRef }: GameWaitProps) {
   return (
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
-        <KillLog isWaiting />
+        <KillLog isWaiting clientRef={clientRef} />
         <SpeechBubble isWaiting />
       </FlexLayout>
-      <BattleFieldWait countdown={countdown > 3 ? 3 : countdown} />
+      <BattleFieldWait countdown={countdown} />
     </FlexLayout>
   );
 }
