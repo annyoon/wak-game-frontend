@@ -4,8 +4,10 @@ import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 
 import { getRoomInfo } from '../../services/room';
+import { startGame } from '../../services/game';
 import { BASE_URL, getAccessToken } from '../../constants/api';
 import { RoomPlayTypes } from '../../types/RoomTypes';
+import useUserStore from '../../store/userStore';
 import useRoomStore from '../../store/roomStore';
 import useGameStore from '../../store/gameStore';
 
@@ -26,10 +28,11 @@ export default function RoomPage() {
     'Content-Type': 'application/json',
   };
   const { id } = useParams();
+  const { userData, setUserData } = useUserStore();
   const { roomData, setRoomData } = useRoomStore();
   const { gameData, setGameData } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [isFetched, setIsFetched] = useState(false);
+  const [roundId, setRoundId] = useState(-1);
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
   const clientRef = useRef<CompatClient | null>(null);
 
@@ -43,10 +46,11 @@ export default function RoomPage() {
           if (message.body === 'ROOM IS EXPIRED') {
             // clear session
             navigate(`/lobby`);
-          } else if (message.body === 'GAME START') {
-            setIsFetched(true);
+          } else if ('roundId' in JSON.parse(message.body)) {
+            setRoundId(JSON.parse(message.body).roundId);
           } else {
             setPlayInfo(JSON.parse(message.body));
+            console.log(JSON.parse(message.body));
           }
         },
         header
@@ -60,6 +64,7 @@ export default function RoomPage() {
     try {
       const fetchedData = id && (await getRoomInfo(parseInt(id)));
       setRoomData(fetchedData.data);
+      setUserData({ ...userData, userId: fetchedData.data.userId });
     } catch (error: any) {
       console.error('방 정보 가져오기 에러', error);
       navigate(`/error`);
@@ -76,33 +81,37 @@ export default function RoomPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
 
+  const fetchData = async () => {
+    setGameData({
+      ...gameData,
+      roundId: roundId,
+      roomName: roomData.roomName,
+      players:
+        playInfo?.users.map((user) => ({
+          roundId: roundId,
+          userId: user.userId,
+          nickname: user.nickname,
+          color: user.color,
+          team: user.team,
+          stamina: 1,
+        })) || [],
+    });
+  };
+
   useEffect(() => {
-    if (isFetched) {
+    if (roundId !== -1) {
       if (!roomData.isHost) {
-        setGameData({
-          ...gameData,
-          roundId: -1,
-          roomName: roomData.roomName,
-          players:
-            playInfo?.users.map((user) => ({
-              roundId: -1,
-              userId: user.userId,
-              nickname: user.nickname,
-              color: user.color,
-              team: user.team,
-              stamina: 1,
-            })) || [],
-        });
+        fetchData();
       }
       navigate(`/game/${id}`);
     }
     // navigate(`/game/${id}`, { replace: true });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFetched]);
+  }, [roundId]);
 
   const checkStart = () => {
     if (playInfo) {
-      return playInfo.currentPlayers > 2;
+      return playInfo.currentPlayers > 1;
     }
     return false;
   };

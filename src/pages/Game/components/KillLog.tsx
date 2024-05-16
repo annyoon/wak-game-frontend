@@ -1,13 +1,12 @@
+import { useEffect, useState } from 'react';
 import { CompatClient } from '@stomp/stompjs';
+import { getAccessToken } from '../../../constants/api';
+import useGameStore from '../../../store/gameStore';
 
 import styled, { css } from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
 import { textStyles } from '../../../styles/fonts';
-
 import WhiteRoundBox from '../../../components/WhiteRoundBox';
-import { useEffect, useState } from 'react';
-import useGameStore from '../../../store/gameStore';
-import { getAccessToken } from '../../../constants/api';
 
 const KillLogBlock = styled.div<{ $isWaiting?: boolean }>`
   width: 100%;
@@ -59,6 +58,7 @@ export default function KillLog({ isWaiting, clientRef }: KillLogProps) {
       clientRef.current?.subscribe(
         `/topic/games/${gameData.roundId}/kill-log`,
         (message) => {
+          console.log('킬로그 업데이트');
           setLogs((prevLogs) => {
             const newLogs = [JSON.parse(message.body), ...prevLogs];
             return newLogs;

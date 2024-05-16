@@ -32,18 +32,19 @@ export default function GamePage() {
     const socket = new SockJS(`${BASE_URL}/socket`);
     clientRef.current = Stomp.over(socket);
     clientRef.current.connect(header, () => {
-      clientRef.current?.subscribe(
-        `/topic/games/${gameData.roundId}/battle-field`,
-        (message) => {
-          if (message.body === 'ROOM IS EXPIRED') {
-            navigate(`/lobby`);
-          } else {
-            const fetchedData = JSON.parse(message.body);
-            setGameData({ ...gameData, players: fetchedData.players });
-          }
-        },
-        header
-      );
+      // clientRef.current?.subscribe(
+      //   `/topic/games/${gameData.roundId}/battle-field`,
+      //   (message) => {
+      //     if (message.body === 'ROOM IS EXPIRED') {
+      //       navigate(`/lobby`);
+      //     } else {
+      //       console.log('플레이어 받음');
+      //       const fetchedData = JSON.parse(message.body);
+      //       setGameData({ ...gameData, players: [...fetchedData.players] });
+      //     }
+      //   },
+      //   header
+      // );
     });
   };
 

@@ -16,7 +16,7 @@ export default function GamePlay({ clientRef }: GamePlayProps) {
         <KillLog clientRef={clientRef} />
         <SpeechBubble />
       </FlexLayout>
-      <BattleField />
+      <BattleField clientRef={clientRef} />
     </FlexLayout>
   );
 }

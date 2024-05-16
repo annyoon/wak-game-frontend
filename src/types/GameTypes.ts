@@ -15,3 +15,9 @@ export type PlayersTypes = {
   team: string;
   stamina: number;
 };
+
+export type ResultTypes = {
+  isFinish: boolean;
+  roundNumber: number;
+  rank: number;
+};
