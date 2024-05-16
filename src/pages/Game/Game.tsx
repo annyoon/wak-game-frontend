@@ -68,7 +68,7 @@ export default function GamePage() {
         </FlexLayout>
         <FlexLayout $isCol gap='1.2rem'>
           <ChatBox mode='ROOM' isShort text={`방 채팅`} />
-          <RankBox />
+          {clientRef.current && <RankBox client={clientRef.current} />}
         </FlexLayout>
       </FlexLayout>
     </Background>
