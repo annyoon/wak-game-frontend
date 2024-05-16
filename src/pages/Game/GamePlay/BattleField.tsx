@@ -42,7 +42,7 @@ export default function BattleField({ client }: BattleFieldProps) {
     'Content-Type': 'application/json',
   };
   const { userId } = useUserStore().userData;
-  const { roundId, players } = useGameStore().gameData;
+  const { roundId, playersNumber } = useGameStore().gameData;
   const { setResultData } = useResultStore();
   const [playerList, setPlayerList] = useState<PlayersTypes[]>([]);
   const [dots, setDots] = useState<DotPosition[]>([]);
@@ -93,7 +93,7 @@ export default function BattleField({ client }: BattleFieldProps) {
       left: `${Math.random() * 92}%`,
     });
 
-    while (generatedDots.length < players.length) {
+    while (generatedDots.length < playersNumber) {
       const newPosition = generateRandomPosition();
       if (!isOverlap(newPosition, generatedDots)) {
         generatedDots.push(newPosition);
@@ -105,13 +105,15 @@ export default function BattleField({ client }: BattleFieldProps) {
   }, [roundId]);
 
   const handleClick = (victimId: number) => {
-    const message = JSON.stringify({
-      roundId: roundId,
-      userId: userId,
-      victimId: victimId,
-      clickTime: currentTime,
-    });
-    client.send(`/app/click/${roundId}`, header, message);
+    if (userId && parseInt(userId) !== victimId) {
+      const message = JSON.stringify({
+        roundId: roundId,
+        userId: userId,
+        victimId: victimId,
+        clickTime: currentTime,
+      });
+      client.send(`/app/click/${roundId}`, header, message);
+    }
   };
 
   return (
@@ -119,7 +121,7 @@ export default function BattleField({ client }: BattleFieldProps) {
       <BattleFieldLayout>
         {dots.map((dot, index) => (
           <Dot key={index} $top={dot.top} $left={dot.left}>
-            {index < playerList.length && (
+            {index < playerList.length && playerList[index].stamina > 0 && (
               <PlayerNickname
                 isCol
                 nickname={playerList[index].nickname}

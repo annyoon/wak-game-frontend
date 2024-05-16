@@ -33,8 +33,8 @@ export default function GameHeader({ client }: GameHeaderProps) {
   const { gameData } = useGameStore();
   const [info, setInfo] = useState({
     roundNumber: 1,
-    totalCount: gameData.players.length,
-    aliveCount: gameData.players.length,
+    totalCount: gameData.playersNumber,
+    aliveCount: gameData.playersNumber,
   });
   const subscribedRef = useRef(false);
 
@@ -63,7 +63,9 @@ export default function GameHeader({ client }: GameHeaderProps) {
       <TextBlock>
         <SmallText>{`현재 방 이름 : ${gameData.roomName} ( ${info.roundNumber} 라운드 )`}</SmallText>
         <SmallText>{`생존자 수 : ${info.totalCount} / ${info.aliveCount} 명`}</SmallText>
-        <SmallText>{`내 상태 : 생존 !`}</SmallText>
+        <SmallText>{`내 상태 : ${
+          gameData.isAlive ? `생존!` : `죽음`
+        }`}</SmallText>
       </TextBlock>
     </HeaderBlock>
   );

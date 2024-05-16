@@ -83,16 +83,7 @@ export default function RoomPage() {
       ...gameData,
       roundId: roundId,
       roomName: roomData.roomName,
-      players:
-        playInfo?.users.map((user) => ({
-          roundId: roundId,
-          userId: user.userId,
-          nickname: user.nickname,
-          color: user.color,
-          team: user.team,
-          stamina: 1,
-          isHost: user.isHost,
-        })) || [],
+      playersNumber: playInfo?.users.length || 0,
     });
   };
 
@@ -136,7 +127,7 @@ export default function RoomPage() {
             <ButtonGroup
               isHost={roomData.isHost}
               canStart={checkStart()}
-              users={playInfo?.users || []}
+              usersNumber={playInfo?.users.length || 0}
               openDialog={() => setIsOpen(true)}
             />
           </FlexLayout>

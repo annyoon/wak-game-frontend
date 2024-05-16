@@ -3,8 +3,9 @@ export type GameTypes = {
   roomName: string;
   hostName: string;
   comment: string;
+  playersNumber: number;
   showNickname: boolean;
-  players: PlayersTypes[];
+  isAlive: boolean;
 };
 
 export type PlayersTypes = {

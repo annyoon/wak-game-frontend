@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
-
 import { BASE_URL, getAccessToken } from '../../constants/api';
-import useGameStore from '../../store/gameStore';
 
 import { FlexLayout } from '../../styles/layout';
 import Background from '../../components/Background';
@@ -21,7 +19,6 @@ export default function GamePage() {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     'Content-Type': 'application/json',
   };
-  const { gameData } = useGameStore();
   const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('WAIT');
   const [countdown, setCountdown] = useState(5);
   const clientRef = useRef<CompatClient | null>(null);
