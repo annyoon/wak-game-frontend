@@ -11,6 +11,7 @@ import { isOverlap } from '../../../utils/isOverlap';
 import styled from 'styled-components';
 import GrayBox from '../../../components/GrayBox';
 import PlayerNickname from '../../../components/PlayerNickname';
+import { getBattleField } from '../../../services/game';
 
 const BattleFieldLayout = styled.div`
   position: relative;
@@ -53,20 +54,28 @@ export default function BattleField({ clientRef }: BattleFieldProps) {
       clientRef.current?.subscribe(
         `/topic/games/${roundId}/battle-field`,
         (message) => {
-          console.log('메세지받음???');
           if (message.body === 'ROOM IS EXPIRED') {
             navigate(`/lobby`);
-          } else if (JSON.parse(message.body).isFinish) {
-            console.log('라운드 끝');
+          } else if (JSON.parse(message.body).isFinished) {
             setResultData(JSON.parse(message.body));
           } else {
-            console.log('플레이어 받음');
+            console.log(JSON.parse(message.body).players);
             setPlayerList(JSON.parse(message.body).players);
           }
         },
         header
       );
-      console.log('구독됨?');
+
+      showBattleField();
+    };
+
+    const showBattleField = async () => {
+      try {
+        await getBattleField(roundId);
+      } catch (error: any) {
+        console.error('배틀필드 요청 에러', error);
+        navigate(`/error`);
+      }
     };
 
     const connectCallback = () => {
@@ -87,7 +96,7 @@ export default function BattleField({ clientRef }: BattleFieldProps) {
       clientRef.current.onConnect = connectCallback;
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientRef, playerList, isSubscribed]);
+  }, [clientRef, isSubscribed]);
 
   useEffect(() => {
     const generatedDots: DotPosition[] = [];

@@ -14,10 +14,11 @@ export type PlayersTypes = {
   color: string;
   team: string;
   stamina: number;
+  isHost: boolean;
 };
 
 export type ResultTypes = {
-  isFinish: boolean;
+  isFinished: boolean;
   roundNumber: number;
   rank: number;
 };

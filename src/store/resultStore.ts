@@ -7,7 +7,7 @@ interface Store {
 }
 
 const useResultStore = create<Store>((set) => ({
-  resultData: { isFinish: true, roundNumber: 0, rank: 0 } as ResultTypes,
+  resultData: { isFinished: true, roundNumber: 0, rank: 0 } as ResultTypes,
   setResultData: (resultData: ResultTypes) =>
     set(() => ({ resultData: { ...resultData } })),
 }));

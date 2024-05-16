@@ -50,7 +50,6 @@ export default function RoomPage() {
             setRoundId(JSON.parse(message.body).roundId);
           } else {
             setPlayInfo(JSON.parse(message.body));
-            console.log(JSON.parse(message.body));
           }
         },
         header
@@ -94,6 +93,7 @@ export default function RoomPage() {
           color: user.color,
           team: user.team,
           stamina: 1,
+          isHost: user.isHost,
         })) || [],
     });
   };

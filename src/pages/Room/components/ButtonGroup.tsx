@@ -52,6 +52,7 @@ export default function ButtonGroup({
             color: user.color,
             team: user.team,
             stamina: 1,
+            isHost: user.isHost,
           })),
         });
       } catch (error: any) {
