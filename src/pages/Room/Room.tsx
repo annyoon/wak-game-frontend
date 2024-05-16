@@ -17,7 +17,6 @@ import PlayerList from './components/PlayerList';
 import RoomSetting from './components/RoomSetting';
 import ButtonGroup from './components/ButtonGroup';
 import StartCheckDialog from './components/StartCheckDialog';
-import { startGame } from '../../services/game';
 
 export default function RoomPage() {
   const navigate = useNavigate();
@@ -30,6 +29,7 @@ export default function RoomPage() {
   const { roomData, setRoomData } = useRoomStore();
   const { gameData, setGameData } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
+  const [isFetched, setIsFetched] = useState(false);
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
   const clientRef = useRef<CompatClient | null>(null);
 
@@ -44,22 +44,7 @@ export default function RoomPage() {
             // clear session
             navigate(`/lobby`);
           } else if (message.body === 'GAME START') {
-            setPlayInfo(JSON.parse(message.body));
-            setGameData({
-              ...gameData,
-              roundId: -1,
-              roomName: roomData.roomName,
-              players:
-                playInfo?.users.map((user) => ({
-                  roundId: -1,
-                  userId: user.userId,
-                  nickname: user.nickname,
-                  color: user.color,
-                  team: user.team,
-                  stamina: 1,
-                })) || [],
-            });
-            navigate(`/game/${id}`);
+            setIsFetched(true);
           } else {
             setPlayInfo(JSON.parse(message.body));
           }
@@ -90,6 +75,30 @@ export default function RoomPage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
+
+  useEffect(() => {
+    if (isFetched) {
+      if (!roomData.isHost) {
+        setGameData({
+          ...gameData,
+          roundId: -1,
+          roomName: roomData.roomName,
+          players:
+            playInfo?.users.map((user) => ({
+              roundId: -1,
+              userId: user.userId,
+              nickname: user.nickname,
+              color: user.color,
+              team: user.team,
+              stamina: 1,
+            })) || [],
+        });
+      }
+      navigate(`/game/${id}`);
+    }
+    // navigate(`/game/${id}`, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFetched]);
 
   const checkStart = () => {
     if (playInfo) {

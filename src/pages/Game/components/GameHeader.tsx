@@ -44,10 +44,16 @@ export default function GameHeader({ clientRef }: GameHeaderProps) {
         `/topic/games/${gameData.roundId}/dashboard`,
         (message) => {
           setInfo(JSON.parse(message.body));
-          console.log('데이터!!!');
         },
         header
       );
+    };
+
+    const connectCallback = () => {
+      if (clientRef.current) {
+        subscribeToTopic();
+        setIsSubscribed(true);
+      }
     };
 
     if (clientRef.current && clientRef.current.connected) {
@@ -56,13 +62,6 @@ export default function GameHeader({ clientRef }: GameHeaderProps) {
     } else {
       setIsSubscribed(false);
     }
-
-    const connectCallback = () => {
-      if (clientRef.current) {
-        subscribeToTopic();
-        setIsSubscribed(true);
-      }
-    };
 
     if (clientRef.current) {
       clientRef.current.onConnect = connectCallback;
