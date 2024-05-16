@@ -4,7 +4,6 @@ import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 
 import { getRoomInfo } from '../../services/room';
-import { startGame } from '../../services/game';
 import { BASE_URL, getAccessToken } from '../../constants/api';
 import { RoomPlayTypes } from '../../types/RoomTypes';
 import useUserStore from '../../store/userStore';
@@ -54,7 +53,6 @@ export default function RoomPage() {
         },
         header
       );
-
       showRoomInfo();
     });
   };

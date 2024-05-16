@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CompatClient } from '@stomp/stompjs';
 import { getAccessToken } from '../../../constants/api';
 import useGameStore from '../../../store/gameStore';
@@ -40,10 +40,10 @@ type KillLogPlayersTypes = {
 
 type KillLogProps = {
   isWaiting?: boolean;
-  clientRef: React.MutableRefObject<CompatClient | null>;
+  client: CompatClient;
 };
 
-export default function KillLog({ isWaiting, clientRef }: KillLogProps) {
+export default function KillLog({ isWaiting, client }: KillLogProps) {
   const ACCESS_TOKEN = getAccessToken();
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -51,14 +51,13 @@ export default function KillLog({ isWaiting, clientRef }: KillLogProps) {
   };
   const { gameData } = useGameStore();
   const [logs, setLogs] = useState<KillLogPlayersTypes[]>([]);
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const subscribedRef = useRef(false);
 
-  useEffect(() => {
-    const subscribeToTopic = () => {
-      clientRef.current?.subscribe(
+  const subscribeToTopic = () => {
+    if (!subscribedRef.current) {
+      client.subscribe(
         `/topic/games/${gameData.roundId}/kill-log`,
         (message) => {
-          console.log('킬로그 업데이트');
           setLogs((prevLogs) => {
             const newLogs = [JSON.parse(message.body), ...prevLogs];
             return newLogs;
@@ -66,28 +65,16 @@ export default function KillLog({ isWaiting, clientRef }: KillLogProps) {
         },
         header
       );
-    };
+      subscribedRef.current = true;
+    }
+  };
 
-    const connectCallback = () => {
-      if (clientRef.current) {
-        subscribeToTopic();
-        setIsSubscribed(true);
-      }
-    };
-
-    if (clientRef.current && clientRef.current.connected) {
+  useEffect(() => {
+    if (client && client.connected) {
       subscribeToTopic();
-      setIsSubscribed(true);
-    } else {
-      setIsSubscribed(false);
     }
-
-    if (clientRef.current) {
-      clientRef.current.onConnect = connectCallback;
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientRef, gameData.roundId, isSubscribed]);
+  }, [client]);
 
   return (
     <WhiteRoundBox width='32rem'>

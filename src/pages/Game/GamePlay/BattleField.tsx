@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CompatClient } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
 import { getAccessToken } from '../../../constants/api';
@@ -31,10 +31,10 @@ type DotPosition = {
 };
 
 type BattleFieldProps = {
-  clientRef: React.MutableRefObject<CompatClient | null>;
+  client: CompatClient;
 };
 
-export default function BattleField({ clientRef }: BattleFieldProps) {
+export default function BattleField({ client }: BattleFieldProps) {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const header = {
@@ -45,13 +45,13 @@ export default function BattleField({ clientRef }: BattleFieldProps) {
   const { roundId, players } = useGameStore().gameData;
   const { setResultData } = useResultStore();
   const [playerList, setPlayerList] = useState<PlayersTypes[]>([]);
-  const [isSubscribed, setIsSubscribed] = useState(false);
   const [dots, setDots] = useState<DotPosition[]>([]);
   const currentTime = new Date().toISOString();
+  const subscribedRef = useRef(false);
 
-  useEffect(() => {
-    const subscribeToTopic = () => {
-      clientRef.current?.subscribe(
+  const subscribeToTopic = () => {
+    if (!subscribedRef.current) {
+      client.subscribe(
         `/topic/games/${roundId}/battle-field`,
         (message) => {
           if (message.body === 'ROOM IS EXPIRED') {
@@ -59,44 +59,32 @@ export default function BattleField({ clientRef }: BattleFieldProps) {
           } else if (JSON.parse(message.body).isFinished) {
             setResultData(JSON.parse(message.body));
           } else {
-            console.log(JSON.parse(message.body).players);
+            console.log('요청');
             setPlayerList(JSON.parse(message.body).players);
           }
         },
         header
       );
-
-      showBattleField();
-    };
-
-    const showBattleField = async () => {
-      try {
-        await getBattleField(roundId);
-      } catch (error: any) {
-        console.error('배틀필드 요청 에러', error);
-        navigate(`/error`);
-      }
-    };
-
-    const connectCallback = () => {
-      if (clientRef.current) {
-        subscribeToTopic();
-        setIsSubscribed(true);
-      }
-    };
-
-    if (clientRef.current && clientRef.current.connected) {
-      subscribeToTopic();
-      setIsSubscribed(true);
-    } else {
-      setIsSubscribed(false);
+      subscribedRef.current = true;
     }
+    showBattleField();
+  };
 
-    if (clientRef.current) {
-      clientRef.current.onConnect = connectCallback;
+  const showBattleField = async () => {
+    try {
+      await getBattleField(roundId);
+    } catch (error: any) {
+      console.error('배틀필드 요청 에러', error);
+      navigate(`/error`);
+    }
+  };
+
+  useEffect(() => {
+    if (client && client.connected) {
+      subscribeToTopic();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientRef, isSubscribed]);
+  }, [client]);
 
   useEffect(() => {
     const generatedDots: DotPosition[] = [];
@@ -123,7 +111,7 @@ export default function BattleField({ clientRef }: BattleFieldProps) {
       victimId: victimId,
       clickTime: currentTime,
     });
-    clientRef.current?.send(`/app/click/${roundId}`, header, message);
+    client.send(`/app/click/${roundId}`, header, message);
   };
 
   return (

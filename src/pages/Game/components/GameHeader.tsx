@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { CompatClient } from '@stomp/stompjs';
 
 import { getAccessToken } from '../../../constants/api';
@@ -21,10 +21,10 @@ const TextBlock = styled.div`
 `;
 
 type GameHeaderProps = {
-  clientRef: React.MutableRefObject<CompatClient | null>;
+  client: CompatClient;
 };
 
-export default function GameHeader({ clientRef }: GameHeaderProps) {
+export default function GameHeader({ client }: GameHeaderProps) {
   const ACCESS_TOKEN = getAccessToken();
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
@@ -36,39 +36,27 @@ export default function GameHeader({ clientRef }: GameHeaderProps) {
     totalCount: gameData.players.length,
     aliveCount: gameData.players.length,
   });
-  const [isSubscribed, setIsSubscribed] = useState(false);
+  const subscribedRef = useRef(false);
 
-  useEffect(() => {
-    const subscribeToTopic = () => {
-      clientRef.current?.subscribe(
+  const subscribeToTopic = () => {
+    if (!subscribedRef.current) {
+      client.subscribe(
         `/topic/games/${gameData.roundId}/dashboard`,
         (message) => {
           setInfo(JSON.parse(message.body));
         },
         header
       );
-    };
+      subscribedRef.current = true;
+    }
+  };
 
-    const connectCallback = () => {
-      if (clientRef.current) {
-        subscribeToTopic();
-        setIsSubscribed(true);
-      }
-    };
-
-    if (clientRef.current && clientRef.current.connected) {
+  useEffect(() => {
+    if (client && client.connected) {
       subscribeToTopic();
-      setIsSubscribed(true);
-    } else {
-      setIsSubscribed(false);
     }
-
-    if (clientRef.current) {
-      clientRef.current.onConnect = connectCallback;
-    }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clientRef, gameData.roundId, isSubscribed]);
+  }, [client]);
 
   return (
     <HeaderBlock>
