@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import styled, { css } from 'styled-components';
 import { textStyles } from '../styles/fonts';
@@ -45,6 +45,7 @@ const BorderX = styled.img.attrs({
 type InputProps = {
   name: string;
   width?: string;
+  reset?: boolean;
   isRound?: boolean;
   disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -53,6 +54,7 @@ type InputProps = {
 export default function Input({
   name,
   width,
+  reset,
   isRound,
   disabled,
   onChange,
@@ -68,6 +70,12 @@ export default function Input({
   const img = isRound
     ? require('../assets/borderImg/img-border-black-h56.png')
     : require('../assets/borderImg/img-border-black-h42.png');
+
+  useEffect(() => {
+    if (reset) {
+      SetInputValue('');
+    }
+  }, [reset]);
 
   return (
     <InputBlock>
