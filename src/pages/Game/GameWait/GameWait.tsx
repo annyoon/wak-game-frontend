@@ -15,7 +15,7 @@ export default function GameWait({ countdown, client }: GameWaitProps) {
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
         <KillLog isWaiting client={client} />
-        <SpeechBubble isWaiting />
+        <SpeechBubble isWaiting client={client} />
       </FlexLayout>
       <BattleFieldWait countdown={countdown} />
     </FlexLayout>

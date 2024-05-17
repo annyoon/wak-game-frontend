@@ -65,9 +65,6 @@ export default function BattleField({
           if (message.body === 'ROOM IS EXPIRED') {
             navigate(`/lobby`);
           } else if (fetchedData.isFinished) {
-            console.log('끝났다');
-            console.log(fetchedData);
-
             setGameData({
               ...gameData,
               roundNumber: fetchedData.roundNumber,
@@ -76,8 +73,6 @@ export default function BattleField({
             checkResult(fetchedData.results);
             changeToResult();
           } else {
-            console.log(fetchedData);
-
             setPlayerList(fetchedData.players);
             checkAlive(fetchedData.players);
           }

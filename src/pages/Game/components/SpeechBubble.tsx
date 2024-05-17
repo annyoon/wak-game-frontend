@@ -1,3 +1,6 @@
+import { useEffect, useRef, useState } from 'react';
+import { CompatClient } from '@stomp/stompjs';
+import { getAccessToken } from '../../../constants/api';
 import useGameStore from '../../../store/gameStore';
 
 import styled from 'styled-components';
@@ -23,18 +26,53 @@ const Text = styled.div`
 `;
 
 type SpeechBubbleProps = {
+  client: CompatClient;
   isWaiting?: boolean;
 };
 
-export default function SpeechBubble({ isWaiting }: SpeechBubbleProps) {
-  const { hostName, comment } = useGameStore().gameData;
+export default function SpeechBubble({ isWaiting, client }: SpeechBubbleProps) {
+  const ACCESS_TOKEN = getAccessToken();
+  const header = {
+    Authorization: `Bearer ${ACCESS_TOKEN}`,
+    'Content-Type': 'application/json',
+  };
+  const { roundId, hostName, comment } = useGameStore().gameData;
+  const [mention, setMention] = useState({
+    sender: '',
+    content: '',
+  });
+  const subscribedRef = useRef(false);
+
+  const subscribeToTopic = () => {
+    if (!subscribedRef.current) {
+      client.subscribe(
+        `/topic/games/${roundId}/mention`,
+        (message) => {
+          setMention(JSON.parse(message.body));
+        },
+        header
+      );
+      subscribedRef.current = true;
+    }
+  };
+
+  useEffect(() => {
+    if (client && client.connected) {
+      subscribeToTopic();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [client]);
 
   return (
     <SpeechBubbleBlock $isCol gap='1rem'>
-      <SmallText color='black'>{`방장의 한마디!`}</SmallText>
+      <SmallText color='black'>{`도발 멘트!`}</SmallText>
       <FlexLayout>
-        <Text color='#725bff'>{isWaiting ? hostName : `김라쿤`}</Text>
-        <Text color='black'>{isWaiting ? comment : `: 바보들아 ~`}</Text>
+        <Text color='#725bff'>{mention.sender}</Text>
+        <Text color='black'>
+          {mention.content === ''
+            ? `(멘트를 입력하지 않았습니다)`
+            : mention.content}
+        </Text>
       </FlexLayout>
     </SpeechBubbleBlock>
   );

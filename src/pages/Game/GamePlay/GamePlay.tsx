@@ -15,7 +15,7 @@ export default function GamePlay({ client, changeToResult }: GamePlayProps) {
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
         <KillLog client={client} />
-        <SpeechBubble />
+        <SpeechBubble client={client} />
       </FlexLayout>
       <BattleField client={client} changeToResult={changeToResult} />
     </FlexLayout>

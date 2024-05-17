@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { CompatClient } from '@stomp/stompjs';
 import useGameStore from '../../../store/gameStore';
 import useResultStore from '../../../store/resultStore';
 
@@ -9,17 +8,11 @@ import GrayBox from '../../../components/GrayBox';
 import Input from '../../../components/Input';
 
 type GameResultProps = {
-  client: CompatClient;
   isWinner?: boolean;
   changeState: () => void;
 };
 
-export default function GameResult({
-  client,
-  isWinner,
-  changeState,
-}: GameResultProps) {
-  const { gameData, setGameData } = useGameStore();
+export default function GameResult({ isWinner, changeState }: GameResultProps) {
   const { roundNumber } = useGameStore().gameData;
   const { killCount, rank } = useResultStore().resultData;
   const [countdown, setCountdown] = useState(30);
@@ -72,11 +65,7 @@ export default function GameResult({
 
   useEffect(() => {
     if (countdown === 0) {
-      client.unsubscribe(`/topic/games/${gameData.roundId}/battle-field`);
-      client.unsubscribe(`/topic/games/${gameData.roundId}/kill-log`);
-      client.unsubscribe(`/topic/games/${gameData.roundId}/rank`);
-      client.unsubscribe(`/topic/games/${gameData.roundId}/dashboard`);
-      setGameData({ ...gameData, roundId: gameData.nextRoundId });
+      // setGameData({ ...gameData, roundId: gameData.nextRoundId });
       changeState();
     } else {
       const timer = setTimeout(() => {

@@ -50,33 +50,27 @@ export default function GamePage() {
 
   return (
     <Background>
-      <FlexLayout gap='4rem'>
-        <FlexLayout $isCol gap='2rem'>
-          {clientRef.current && <GameHeader client={clientRef.current} />}
-          {state === 'WAIT'
-            ? clientRef.current && (
-                <GameWait countdown={countdown} client={clientRef.current} />
-              )
-            : state === 'PLAY'
-            ? clientRef.current && (
-                <GamePlay
-                  client={clientRef.current}
-                  changeToResult={() => setState('RESULT')}
-                />
-              )
-            : clientRef.current && (
-                <GameResult
-                  client={clientRef.current}
-                  isWinner
-                  changeState={() => setState('PLAY')}
-                />
-              )}
+      {clientRef.current && (
+        <FlexLayout gap='4rem'>
+          <FlexLayout $isCol gap='2rem'>
+            <GameHeader client={clientRef.current} />
+            {state === 'WAIT' ? (
+              <GameWait countdown={countdown} client={clientRef.current} />
+            ) : state === 'PLAY' ? (
+              <GamePlay
+                client={clientRef.current}
+                changeToResult={() => setState('RESULT')}
+              />
+            ) : (
+              <GameResult isWinner changeState={() => setState('PLAY')} />
+            )}
+          </FlexLayout>
+          <FlexLayout $isCol gap='1.2rem'>
+            <ChatBox mode='ROOM' isShort text={`방 채팅`} />
+            <RankBox client={clientRef.current} />
+          </FlexLayout>
         </FlexLayout>
-        <FlexLayout $isCol gap='1.2rem'>
-          <ChatBox mode='ROOM' isShort text={`방 채팅`} />
-          {clientRef.current && <RankBox client={clientRef.current} />}
-        </FlexLayout>
-      </FlexLayout>
+      )}
     </Background>
   );
 }
