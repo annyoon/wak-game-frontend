@@ -61,7 +61,6 @@ export default function RankBox({ client }: RankBoxProps) {
       client.subscribe(
         `/topic/games/${gameData.roundId}/rank`,
         (message) => {
-          console.log(JSON.parse(message.body).ranks);
           setRanks([...JSON.parse(message.body).ranks]);
         },
         header

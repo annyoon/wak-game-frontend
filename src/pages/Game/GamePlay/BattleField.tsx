@@ -42,6 +42,7 @@ export default function BattleField({ client }: BattleFieldProps) {
     'Content-Type': 'application/json',
   };
   const { userId } = useUserStore().userData;
+  const { gameData, setGameData } = useGameStore();
   const { roundId, playersNumber } = useGameStore().gameData;
   const { setResultData } = useResultStore();
   const [playerList, setPlayerList] = useState<PlayersTypes[]>([]);
@@ -61,6 +62,7 @@ export default function BattleField({ client }: BattleFieldProps) {
           } else {
             console.log('요청');
             setPlayerList(JSON.parse(message.body).players);
+            checkAlive(JSON.parse(message.body).players);
           }
         },
         header
@@ -68,6 +70,15 @@ export default function BattleField({ client }: BattleFieldProps) {
       subscribedRef.current = true;
     }
     showBattleField();
+  };
+
+  const checkAlive = (newDataList: PlayersTypes[]) => {
+    newDataList.forEach((player) => {
+      if (userId === player.userId && player.stamina === 0) {
+        setGameData({ ...gameData, isAlive: false });
+        return;
+      }
+    });
   };
 
   const showBattleField = async () => {
@@ -105,7 +116,7 @@ export default function BattleField({ client }: BattleFieldProps) {
   }, [roundId]);
 
   const handleClick = (victimId: number) => {
-    if (userId && parseInt(userId) !== victimId) {
+    if (userId && userId !== victimId) {
       const message = JSON.stringify({
         roundId: roundId,
         userId: userId,
