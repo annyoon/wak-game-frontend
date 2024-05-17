@@ -49,6 +49,7 @@ type InputProps = {
   isRound?: boolean;
   disabled?: boolean;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleKeyDown?: () => void;
 };
 
 export default function Input({
@@ -58,8 +59,15 @@ export default function Input({
   isRound,
   disabled,
   onChange,
+  handleKeyDown,
 }: InputProps) {
   const [inputValue, SetInputValue] = useState('');
+
+  const enterkey = (e: React.KeyboardEvent) => {
+    if (handleKeyDown && e.key === 'Enter') {
+      handleKeyDown();
+    }
+  };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = e.target.value;
@@ -88,6 +96,7 @@ export default function Input({
         color='black'
         disabled={disabled}
         onChange={handleChange}
+        onKeyDown={enterkey}
       />
       <BorderX src={img} $right />
     </InputBlock>

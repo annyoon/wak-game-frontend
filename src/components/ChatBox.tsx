@@ -145,7 +145,12 @@ export default function ChatBox({ mode, isShort, text }: ChatBoxProps) {
         })}
       </ChatBlock>
       <FlexLayout gap='1rem'>
-        <Input name='chatting' reset={reset} onChange={handleChange} />
+        <Input
+          name='chatting'
+          reset={reset}
+          onChange={handleChange}
+          handleKeyDown={handleClick}
+        />
         <Button label={`전송`} onClick={handleClick} />
       </FlexLayout>
     </WhiteBox>
