@@ -7,16 +7,17 @@ import BattleField from './BattleField';
 
 type GamePlayProps = {
   client: CompatClient;
+  changeToResult: () => void;
 };
 
-export default function GamePlay({ client }: GamePlayProps) {
+export default function GamePlay({ client, changeToResult }: GamePlayProps) {
   return (
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
         <KillLog client={client} />
         <SpeechBubble />
       </FlexLayout>
-      <BattleField client={client} />
+      <BattleField client={client} changeToResult={changeToResult} />
     </FlexLayout>
   );
 }

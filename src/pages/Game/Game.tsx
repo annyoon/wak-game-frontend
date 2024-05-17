@@ -53,15 +53,24 @@ export default function GamePage() {
       <FlexLayout gap='4rem'>
         <FlexLayout $isCol gap='2rem'>
           {clientRef.current && <GameHeader client={clientRef.current} />}
-          {state === 'WAIT' ? (
-            clientRef.current && (
-              <GameWait countdown={countdown} client={clientRef.current} />
-            )
-          ) : state === 'PLAY' ? (
-            clientRef.current && <GamePlay client={clientRef.current} />
-          ) : (
-            <GameResult isWinner round={3} />
-          )}
+          {state === 'WAIT'
+            ? clientRef.current && (
+                <GameWait countdown={countdown} client={clientRef.current} />
+              )
+            : state === 'PLAY'
+            ? clientRef.current && (
+                <GamePlay
+                  client={clientRef.current}
+                  changeToResult={() => setState('RESULT')}
+                />
+              )
+            : clientRef.current && (
+                <GameResult
+                  client={clientRef.current}
+                  isWinner
+                  changeState={() => setState('PLAY')}
+                />
+              )}
         </FlexLayout>
         <FlexLayout $isCol gap='1.2rem'>
           <ChatBox mode='ROOM' isShort text={`방 채팅`} />

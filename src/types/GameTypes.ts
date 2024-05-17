@@ -1,5 +1,7 @@
 export type GameTypes = {
   roundId: number;
+  nextRoundId: number;
+  roundNumber: number;
   roomName: string;
   hostName: string;
   comment: string;
@@ -19,7 +21,7 @@ export type PlayersTypes = {
 };
 
 export type ResultTypes = {
-  isFinished: boolean;
-  roundNumber: number;
+  userId: number;
+  killCount: number;
   rank: number;
 };

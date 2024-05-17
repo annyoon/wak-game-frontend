@@ -62,7 +62,7 @@ export default function GameHeader({ client }: GameHeaderProps) {
     <HeaderBlock>
       <TextBlock>
         <SmallText>{`현재 방 이름 : ${gameData.roomName} ( ${info.roundNumber} 라운드 )`}</SmallText>
-        <SmallText>{`생존자 수 : ${info.totalCount} / ${info.aliveCount} 명`}</SmallText>
+        <SmallText>{`생존자 수 : ${info.aliveCount} / ${info.totalCount} 명`}</SmallText>
         <SmallText>{`내 상태 : ${
           gameData.isAlive ? `생존!` : `죽음`
         }`}</SmallText>

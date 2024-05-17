@@ -1,15 +1,29 @@
+import { useEffect, useState } from 'react';
+import { CompatClient } from '@stomp/stompjs';
+import useGameStore from '../../../store/gameStore';
+import useResultStore from '../../../store/resultStore';
+
 import { FlexLayout } from '../../../styles/layout';
 import { RegularText, SmallText } from '../../../styles/fonts';
-
 import GrayBox from '../../../components/GrayBox';
 import Input from '../../../components/Input';
 
 type GameResultProps = {
+  client: CompatClient;
   isWinner?: boolean;
-  round: number;
+  changeState: () => void;
 };
 
-export default function GameResult({ isWinner, round }: GameResultProps) {
+export default function GameResult({
+  client,
+  isWinner,
+  changeState,
+}: GameResultProps) {
+  const { gameData, setGameData } = useGameStore();
+  const { roundNumber } = useGameStore().gameData;
+  const { killCount, rank } = useResultStore().resultData;
+  const [countdown, setCountdown] = useState(30);
+
   const ResultText = ({
     title,
     results,
@@ -20,8 +34,9 @@ export default function GameResult({ isWinner, round }: GameResultProps) {
     timeText: string;
   }) => {
     const RESULTS_LENGTH = 5;
+
     return (
-      <FlexLayout $isCol gap={isWinner && round < 3 ? '4rem' : '6rem'}>
+      <FlexLayout $isCol gap={isWinner && roundNumber < 3 ? '4rem' : '6rem'}>
         <RegularText color='black'>{title}</RegularText>
         <FlexLayout $isCol gap='2.4rem'>
           {results.slice(0, RESULTS_LENGTH - 1).map((value, index) => {
@@ -32,10 +47,10 @@ export default function GameResult({ isWinner, round }: GameResultProps) {
               >{`${value[0]} : ${value[1]}`}</SmallText>
             );
           })}
-          {isWinner && round < 3 ? (
+          {isWinner && roundNumber < 3 ? (
             <FlexLayout $isCol gap='1rem'>
               <SmallText color='black'>{`${
-                round + 1
+                roundNumber + 1
               } 라운드 도발 멘트 입력`}</SmallText>
               <Input name='winnerComment' width='60rem' />
             </FlexLayout>
@@ -55,16 +70,33 @@ export default function GameResult({ isWinner, round }: GameResultProps) {
     );
   };
 
+  useEffect(() => {
+    if (countdown === 0) {
+      client.unsubscribe(`/topic/games/${gameData.roundId}/battle-field`);
+      client.unsubscribe(`/topic/games/${gameData.roundId}/kill-log`);
+      client.unsubscribe(`/topic/games/${gameData.roundId}/rank`);
+      client.unsubscribe(`/topic/games/${gameData.roundId}/dashboard`);
+      setGameData({ ...gameData, roundId: gameData.nextRoundId });
+      changeState();
+    } else {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
+
   const roundData = {
-    title: `<< ${round} 라운드 결과 >>`,
+    title: `<< ${roundNumber} 라운드 결과 >>`,
     results: [
       ['게임 시간', '10.03초'],
       ['나의 생존 시간', '5.29초'],
-      ['나의 킬 수', '3킬'],
-      ['나의 랭킹', '9위'],
+      ['나의 킬 수', `${killCount}킬`],
+      ['나의 랭킹', `${rank}위`],
       ['나를 죽인 사람', '김싸피'],
     ],
-    timeText: `${round + 1} 라운드 시작까지 ...30초`,
+    timeText: `${roundNumber + 1} 라운드 시작까지 ...${countdown}초`,
   };
 
   const finalData = {
@@ -72,17 +104,17 @@ export default function GameResult({ isWinner, round }: GameResultProps) {
     results: [
       ['총 게임 시간', '50.35초'],
       ['나의 총 생존 시간', '14.78초'],
-      ['나의 총 킬 수', '11킬'],
-      ['나의 최종 랭킹', '6위'],
+      ['나의 총 킬 수', `${killCount}킬`],
+      ['나의 최종 랭킹', `${rank}위`],
       ['최종 1위', '김싸피'],
     ],
-    timeText: `게임 종료까지 ...30초`,
+    timeText: `게임 종료까지 ...${countdown}초`,
   };
 
   return (
     <FlexLayout $isCol gap='1rem'>
       <GrayBox mode={'TALL'} width={'79.2rem'}>
-        {round < 3 ? ResultText(roundData) : ResultText(finalData)}
+        {roundNumber < 3 ? ResultText(roundData) : ResultText(finalData)}
       </GrayBox>
     </FlexLayout>
   );

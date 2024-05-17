@@ -1,11 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
-import { CompatClient } from '@stomp/stompjs';
 import { useNavigate } from 'react-router-dom';
+import { CompatClient } from '@stomp/stompjs';
+
 import { getAccessToken } from '../../../constants/api';
+import { PlayersTypes, ResultTypes } from '../../../types/GameTypes';
 import useUserStore from '../../../store/userStore';
 import useGameStore from '../../../store/gameStore';
 import useResultStore from '../../../store/resultStore';
-import { PlayersTypes } from '../../../types/GameTypes';
 import { isOverlap } from '../../../utils/isOverlap';
 
 import styled from 'styled-components';
@@ -32,9 +33,13 @@ type DotPosition = {
 
 type BattleFieldProps = {
   client: CompatClient;
+  changeToResult: () => void;
 };
 
-export default function BattleField({ client }: BattleFieldProps) {
+export default function BattleField({
+  client,
+  changeToResult,
+}: BattleFieldProps) {
   const navigate = useNavigate();
   const ACCESS_TOKEN = getAccessToken();
   const header = {
@@ -43,26 +48,38 @@ export default function BattleField({ client }: BattleFieldProps) {
   };
   const { userId } = useUserStore().userData;
   const { gameData, setGameData } = useGameStore();
-  const { roundId, playersNumber } = useGameStore().gameData;
   const { setResultData } = useResultStore();
-  const [playerList, setPlayerList] = useState<PlayersTypes[]>([]);
+
   const [dots, setDots] = useState<DotPosition[]>([]);
-  const currentTime = new Date().toISOString();
+  const [playerList, setPlayerList] = useState<PlayersTypes[]>([]);
   const subscribedRef = useRef(false);
+
+  const currentTime = new Date().toISOString();
 
   const subscribeToTopic = () => {
     if (!subscribedRef.current) {
       client.subscribe(
-        `/topic/games/${roundId}/battle-field`,
+        `/topic/games/${gameData.roundId}/battle-field`,
         (message) => {
+          const fetchedData = JSON.parse(message.body);
           if (message.body === 'ROOM IS EXPIRED') {
             navigate(`/lobby`);
-          } else if (JSON.parse(message.body).isFinished) {
-            setResultData(JSON.parse(message.body));
+          } else if (fetchedData.isFinished) {
+            console.log('끝났다');
+            console.log(fetchedData);
+
+            setGameData({
+              ...gameData,
+              roundNumber: fetchedData.roundNumber,
+              nextRoundId: fetchedData.nextRoundId,
+            });
+            checkResult(fetchedData.results);
+            changeToResult();
           } else {
-            console.log('요청');
-            setPlayerList(JSON.parse(message.body).players);
-            checkAlive(JSON.parse(message.body).players);
+            console.log(fetchedData);
+
+            setPlayerList(fetchedData.players);
+            checkAlive(fetchedData.players);
           }
         },
         header
@@ -81,9 +98,18 @@ export default function BattleField({ client }: BattleFieldProps) {
     });
   };
 
+  const checkResult = (newDataList: ResultTypes[]) => {
+    newDataList.forEach((result) => {
+      if (userId === result.userId) {
+        setResultData(result);
+        return;
+      }
+    });
+  };
+
   const showBattleField = async () => {
     try {
-      await getBattleField(roundId);
+      await getBattleField(gameData.roundId);
     } catch (error: any) {
       console.error('배틀필드 요청 에러', error);
       navigate(`/error`);
@@ -104,26 +130,25 @@ export default function BattleField({ client }: BattleFieldProps) {
       left: `${Math.random() * 92}%`,
     });
 
-    while (generatedDots.length < playersNumber) {
+    while (generatedDots.length < gameData.playersNumber) {
       const newPosition = generateRandomPosition();
       if (!isOverlap(newPosition, generatedDots)) {
         generatedDots.push(newPosition);
       }
     }
-
     setDots(generatedDots);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roundId]);
+  }, [gameData.roundId]);
 
   const handleClick = (victimId: number) => {
     if (userId && userId !== victimId) {
       const message = JSON.stringify({
-        roundId: roundId,
+        roundId: gameData.roundId,
         userId: userId,
         victimId: victimId,
         clickTime: currentTime,
       });
-      client.send(`/app/click/${roundId}`, header, message);
+      client.send(`/app/click/${gameData.roundId}`, header, message);
     }
   };
 
