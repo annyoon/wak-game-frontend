@@ -34,9 +34,3 @@ export type RankPlayersTypes = {
   color: string;
   killCnt: number;
 };
-
-export type ResultTypes = {
-  userId: number;
-  killCount: number;
-  rank: number;
-};

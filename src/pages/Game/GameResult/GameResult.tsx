@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import useGameStore from '../../../store/gameStore';
 import useResultStore from '../../../store/resultStore';
+import useFinalResultStore from '../../../store/finalResultStore';
 
 import { FlexLayout } from '../../../styles/layout';
 import { RegularText, SmallText } from '../../../styles/fonts';
@@ -17,7 +18,16 @@ export default function GameResult({ changeState }: GameResultProps) {
   const ROUND_NUMBER = 3;
   const navigate = useNavigate();
   const { roundNumber } = useGameStore().gameData;
-  const { killCount, rank } = useResultStore().resultData;
+  const { killCount, rank, playTime, aliveTime, victim, victimColor } =
+    useResultStore().resultData;
+  const {
+    totalTime,
+    totalAliveTime,
+    totalKillCount,
+    finalRank,
+    rankwinnerNickname,
+    winnerColor,
+  } = useFinalResultStore().finalResultData;
   const [countdown, setCountdown] = useState(30);
 
   const ResultText = ({
@@ -58,7 +68,9 @@ export default function GameResult({ changeState }: GameResultProps) {
               <SmallText color='black'>{`${
                 results[RESULTS_LENGTH - 1][0]
               } :`}</SmallText>
-              <SmallText color='#725bff'>
+              <SmallText
+                color={roundNumber < ROUND_NUMBER ? victimColor : winnerColor}
+              >
                 {results[RESULTS_LENGTH - 1][1]}
               </SmallText>
             </FlexLayout>
@@ -72,23 +84,27 @@ export default function GameResult({ changeState }: GameResultProps) {
   const roundData = {
     title: `<< ${roundNumber} 라운드 결과 >>`,
     results: [
-      ['게임 시간', '10.03초'],
-      ['나의 생존 시간', '5.29초'],
+      ['게임 시간', `${playTime}초`],
+      ['나의 생존 시간', `${aliveTime}초`],
       ['나의 킬 수', `${killCount}킬`],
       ['나의 랭킹', `${rank}위`],
-      ['나를 죽인 사람', '김싸피'],
+      ['나를 죽인 사람', `${rank === 1 ? `없음` : victim}`],
     ],
-    timeText: `${roundNumber + 1} 라운드 시작까지 ...${countdown}초`,
+    timeText: `${
+      roundNumber === ROUND_NUMBER
+        ? `최종 결과 표시까지`
+        : `${roundNumber + 1} 라운드 시작까지`
+    } ...${countdown}초`,
   };
 
   const finalData = {
     title: `<< 최종 결과 >>`,
     results: [
-      ['총 게임 시간', '50.35초'],
-      ['나의 총 생존 시간', '14.78초'],
-      ['나의 총 킬 수', `${killCount}킬`],
-      ['나의 최종 랭킹', `${rank}위`],
-      ['최종 1위', '김싸피'],
+      ['총 게임 시간', `${totalTime}초`],
+      ['나의 총 생존 시간', `${totalAliveTime}초`],
+      ['나의 총 킬 수', `${totalKillCount}킬`],
+      ['나의 최종 랭킹', `${finalRank}위`],
+      ['최종 1위', `${rankwinnerNickname}`],
     ],
     timeText: `게임 종료까지 ...${countdown}초`,
   };

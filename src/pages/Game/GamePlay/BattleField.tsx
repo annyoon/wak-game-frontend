@@ -100,8 +100,9 @@ export default function BattleField({ client, players }: BattleFieldProps) {
             {index < players.length && players[index].stamina > 0 && (
               <PlayerNickname
                 isCol
+                isHidden={!gameData.showNickname}
                 nickname={players[index].nickname}
-                color={players[index].color}
+                color={gameData.showNickname ? players[index].color : 'black'}
                 onClick={() => handleClick(players[index].userId)}
               />
             )}

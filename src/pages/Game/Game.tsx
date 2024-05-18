@@ -7,12 +7,13 @@ import { BASE_URL, getAccessToken } from '../../constants/api';
 import useUserStore from '../../store/userStore';
 import useGameStore from '../../store/gameStore';
 import useResultStore from '../../store/resultStore';
+import useFinalResultStore from '../../store/finalResultStore';
 import {
   PlayersTypes,
   KillLogPlayersTypes,
   RankPlayersTypes,
-  ResultTypes,
 } from '../../types/GameTypes';
+import { ResultTypes, FinalResultTypes } from '../../types/ResultTypes';
 
 import { FlexLayout } from '../../styles/layout';
 import Background from '../../components/Background';
@@ -35,6 +36,7 @@ export default function GamePage() {
   const { userId } = useUserStore().userData;
   const { gameData, setGameData } = useGameStore();
   const { setResultData } = useResultStore();
+  const { setFinalResultData } = useFinalResultStore();
   const client = useRef<CompatClient | null>(null);
 
   const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('WAIT');
@@ -66,8 +68,10 @@ export default function GamePage() {
               nextRoundId: data.nextRoundId,
             });
             checkMyResult(data.results);
+            data.roundNumber === 3 && checkMyFinalResult(data.finalResults);
             setState('RESULT');
           } else {
+            console.log(data.players);
             setPlayers(data.players);
             checkAlive(data.players);
           }
@@ -105,6 +109,15 @@ export default function GamePage() {
     newResults.forEach((result) => {
       if (userId === result.userId) {
         setResultData(result);
+        return;
+      }
+    });
+  };
+
+  const checkMyFinalResult = (newResults: FinalResultTypes[]) => {
+    newResults.forEach((result) => {
+      if (userId === result.userId) {
+        setFinalResultData(result);
         return;
       }
     });

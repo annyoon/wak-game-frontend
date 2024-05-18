@@ -31,7 +31,7 @@ export default function RoomPage() {
   const { roomData, setRoomData } = useRoomStore();
   const { gameData, setGameData } = useGameStore();
   const [isOpen, setIsOpen] = useState(false);
-  const [roundId, setRoundId] = useState(-1);
+
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
   const clientRef = useRef<CompatClient | null>(null);
 
@@ -46,7 +46,16 @@ export default function RoomPage() {
             // clear session
             navigate(`/lobby`);
           } else if ('roundId' in JSON.parse(message.body)) {
-            setRoundId(JSON.parse(message.body).roundId);
+            const { roundId, showNickname } = JSON.parse(message.body);
+            if (!roomData.isHost) {
+              setGameData({
+                ...gameData,
+                roundId: roundId,
+                roomName: roomData.roomName,
+                playersNumber: playInfo?.users.length || 0,
+                showNickname: showNickname,
+              });
+            }
           } else {
             setPlayInfo(JSON.parse(message.body));
           }
@@ -77,26 +86,6 @@ export default function RoomPage() {
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ACCESS_TOKEN]);
-
-  const fetchData = async () => {
-    setGameData({
-      ...gameData,
-      roundId: roundId,
-      roomName: roomData.roomName,
-      playersNumber: playInfo?.users.length || 0,
-    });
-  };
-
-  useEffect(() => {
-    if (roundId !== -1) {
-      if (!roomData.isHost) {
-        fetchData();
-      }
-      navigate(`/game/${id}`);
-    }
-    // navigate(`/game/${id}`, { replace: true });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [roundId]);
 
   const checkStart = () => {
     if (playInfo) {
