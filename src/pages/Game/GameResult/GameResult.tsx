@@ -6,13 +6,16 @@ import { FlexLayout } from '../../../styles/layout';
 import { RegularText, SmallText } from '../../../styles/fonts';
 import GrayBox from '../../../components/GrayBox';
 import Input from '../../../components/Input';
+import { useNavigate } from 'react-router-dom';
 
 type GameResultProps = {
-  isWinner?: boolean;
   changeState: () => void;
 };
 
-export default function GameResult({ isWinner, changeState }: GameResultProps) {
+export default function GameResult({ changeState }: GameResultProps) {
+  const RESULTS_LENGTH = 5;
+  const ROUND_NUMBER = 3;
+  const navigate = useNavigate();
   const { roundNumber } = useGameStore().gameData;
   const { killCount, rank } = useResultStore().resultData;
   const [countdown, setCountdown] = useState(30);
@@ -26,21 +29,24 @@ export default function GameResult({ isWinner, changeState }: GameResultProps) {
     results: string[][];
     timeText: string;
   }) => {
-    const RESULTS_LENGTH = 5;
-
     return (
-      <FlexLayout $isCol gap={isWinner && roundNumber < 3 ? '4rem' : '6rem'}>
+      <FlexLayout
+        $isCol
+        gap={roundNumber < ROUND_NUMBER && rank === 1 ? '4rem' : '6rem'}
+      >
         <RegularText color='black'>{title}</RegularText>
         <FlexLayout $isCol gap='2.4rem'>
           {results.slice(0, RESULTS_LENGTH - 1).map((value, index) => {
             return (
-              <SmallText
-                key={index}
-                color='black'
-              >{`${value[0]} : ${value[1]}`}</SmallText>
+              <FlexLayout key={index} gap='1.2rem'>
+                <SmallText color='black'>{`${value[0]} :`}</SmallText>
+                <SmallText color={value[1] === '1위' ? '#ffde32' : 'black'}>
+                  {value[1]}
+                </SmallText>
+              </FlexLayout>
             );
           })}
-          {isWinner && roundNumber < 3 ? (
+          {roundNumber < ROUND_NUMBER && rank === 1 ? (
             <FlexLayout $isCol gap='1rem'>
               <SmallText color='black'>{`${
                 roundNumber + 1
@@ -51,7 +57,7 @@ export default function GameResult({ isWinner, changeState }: GameResultProps) {
             <FlexLayout gap='1.2rem'>
               <SmallText color='black'>{`${
                 results[RESULTS_LENGTH - 1][0]
-              } : `}</SmallText>
+              } :`}</SmallText>
               <SmallText color='#725bff'>
                 {results[RESULTS_LENGTH - 1][1]}
               </SmallText>
@@ -62,19 +68,6 @@ export default function GameResult({ isWinner, changeState }: GameResultProps) {
       </FlexLayout>
     );
   };
-
-  useEffect(() => {
-    if (countdown === 0) {
-      // setGameData({ ...gameData, roundId: gameData.nextRoundId });
-      changeState();
-    } else {
-      const timer = setTimeout(() => {
-        setCountdown(countdown - 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [countdown]);
 
   const roundData = {
     title: `<< ${roundNumber} 라운드 결과 >>`,
@@ -100,10 +93,29 @@ export default function GameResult({ isWinner, changeState }: GameResultProps) {
     timeText: `게임 종료까지 ...${countdown}초`,
   };
 
+  useEffect(() => {
+    if (countdown === 0) {
+      if (roundNumber < ROUND_NUMBER) {
+        // setGameData({ ...gameData, roundId: gameData.nextRoundId });
+        changeState();
+      } else {
+        navigate(`/lobby`);
+      }
+    } else {
+      const timer = setTimeout(() => {
+        setCountdown(countdown - 1);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [countdown]);
+
   return (
     <FlexLayout $isCol gap='1rem'>
       <GrayBox mode={'TALL'} width={'79.2rem'}>
-        {roundNumber < 3 ? ResultText(roundData) : ResultText(finalData)}
+        {roundNumber < ROUND_NUMBER
+          ? ResultText(roundData)
+          : ResultText(finalData)}
       </GrayBox>
     </FlexLayout>
   );

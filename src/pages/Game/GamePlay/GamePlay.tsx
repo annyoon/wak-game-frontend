@@ -1,4 +1,5 @@
 import { CompatClient } from '@stomp/stompjs';
+import { PlayersTypes, KillLogPlayersTypes } from '../../../types/GameTypes';
 
 import { FlexLayout } from '../../../styles/layout';
 import KillLog from '../components/KillLog';
@@ -7,17 +8,18 @@ import BattleField from './BattleField';
 
 type GamePlayProps = {
   client: CompatClient;
-  changeToResult: () => void;
+  logs: KillLogPlayersTypes[];
+  players: PlayersTypes[];
 };
 
-export default function GamePlay({ client, changeToResult }: GamePlayProps) {
+export default function GamePlay({ client, logs, players }: GamePlayProps) {
   return (
     <FlexLayout $isCol gap='1rem'>
       <FlexLayout gap='2rem'>
-        <KillLog client={client} />
-        <SpeechBubble client={client} />
+        <KillLog logs={logs} />
+        <SpeechBubble />
       </FlexLayout>
-      <BattleField client={client} changeToResult={changeToResult} />
+      <BattleField client={client} players={players} />
     </FlexLayout>
   );
 }

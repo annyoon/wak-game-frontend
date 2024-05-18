@@ -1,7 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
-import { CompatClient } from '@stomp/stompjs';
-import { getAccessToken } from '../../../constants/api';
-import useGameStore from '../../../store/gameStore';
+import { useState } from 'react';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';
@@ -25,43 +22,13 @@ const Text = styled.div`
   line-height: 1.2;
 `;
 
-type SpeechBubbleProps = {
-  client: CompatClient;
-  isWaiting?: boolean;
-};
+// type SpeechBubbleProps = {};
 
-export default function SpeechBubble({ isWaiting, client }: SpeechBubbleProps) {
-  const ACCESS_TOKEN = getAccessToken();
-  const header = {
-    Authorization: `Bearer ${ACCESS_TOKEN}`,
-    'Content-Type': 'application/json',
-  };
-  const { roundId, hostName, comment } = useGameStore().gameData;
+export default function SpeechBubble() {
   const [mention, setMention] = useState({
     sender: '',
     content: '',
   });
-  const subscribedRef = useRef(false);
-
-  const subscribeToTopic = () => {
-    if (!subscribedRef.current) {
-      client.subscribe(
-        `/topic/games/${roundId}/mention`,
-        (message) => {
-          setMention(JSON.parse(message.body));
-        },
-        header
-      );
-      subscribedRef.current = true;
-    }
-  };
-
-  useEffect(() => {
-    if (client && client.connected) {
-      subscribeToTopic();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [client]);
 
   return (
     <SpeechBubbleBlock $isCol gap='1rem'>

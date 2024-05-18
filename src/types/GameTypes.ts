@@ -20,6 +20,21 @@ export type PlayersTypes = {
   isHost: boolean;
 };
 
+export type KillLogPlayersTypes = {
+  roundId: number;
+  userNickname: string;
+  color: string;
+  victimNickName: string;
+  victimColor: string;
+};
+
+export type RankPlayersTypes = {
+  userId: number;
+  nickname: string;
+  color: string;
+  killCnt: number;
+};
+
 export type ResultTypes = {
   userId: number;
   killCount: number;

@@ -3,7 +3,6 @@ import { exitRoom } from '../../../services/room';
 import { startGame } from '../../../services/game';
 import useRoomStore from '../../../store/roomStore';
 import useGameStore from '../../../store/gameStore';
-import { PlayerTypes } from '../../../types/RoomTypes';
 
 import styled from 'styled-components';
 import { FlexLayout } from '../../../styles/layout';

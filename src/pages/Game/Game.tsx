@@ -1,7 +1,18 @@
 import { useEffect, useRef, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import SockJS from 'sockjs-client';
 import { CompatClient, Stomp } from '@stomp/stompjs';
 import { BASE_URL, getAccessToken } from '../../constants/api';
+
+import useUserStore from '../../store/userStore';
+import useGameStore from '../../store/gameStore';
+import useResultStore from '../../store/resultStore';
+import {
+  PlayersTypes,
+  KillLogPlayersTypes,
+  RankPlayersTypes,
+  ResultTypes,
+} from '../../types/GameTypes';
 
 import { FlexLayout } from '../../styles/layout';
 import Background from '../../components/Background';
@@ -14,28 +25,107 @@ import GamePlay from './GamePlay/GamePlay';
 import GameResult from './GameResult/GameResult';
 
 export default function GamePage() {
+  const COUNTDOWN_TIME = 5;
   const ACCESS_TOKEN = getAccessToken();
   const header = {
     Authorization: `Bearer ${ACCESS_TOKEN}`,
     'Content-Type': 'application/json',
   };
+  const { id } = useParams();
+  const { userId } = useUserStore().userData;
+  const { gameData, setGameData } = useGameStore();
+  const { setResultData } = useResultStore();
+  const client = useRef<CompatClient | null>(null);
+
   const [state, setState] = useState<'WAIT' | 'PLAY' | 'RESULT'>('WAIT');
-  const [countdown, setCountdown] = useState(5);
-  const clientRef = useRef<CompatClient | null>(null);
+  const [countdown, setCountdown] = useState(COUNTDOWN_TIME);
+  const [players, setPlayers] = useState<PlayersTypes[]>([]);
+  const [logs, setLogs] = useState<KillLogPlayersTypes[]>([]);
+  const [ranks, setRanks] = useState<RankPlayersTypes[]>([]);
+  const [dashBoard, setDashBoard] = useState({
+    roundNumber: 1,
+    totalCount: gameData.playersNumber,
+    aliveCount: gameData.playersNumber,
+  });
 
   const connectHandler = () => {
+    if (client.current && client.current.connected) {
+      return;
+    }
     const socket = new SockJS(`${BASE_URL}/socket`);
-    clientRef.current = Stomp.over(socket);
-    clientRef.current.connect(header, () => {});
+    client.current = Stomp.over(socket);
+    client.current.connect(header, () => {
+      client.current?.subscribe(
+        `/topic/games/${id}/battle-field`,
+        (message) => {
+          const data = JSON.parse(message.body);
+          if (data.isFinished) {
+            setGameData({
+              ...gameData,
+              roundNumber: data.roundNumber,
+              nextRoundId: data.nextRoundId,
+            });
+            checkMyResult(data.results);
+            setState('RESULT');
+          } else {
+            setPlayers(data.players);
+            checkAlive(data.players);
+          }
+        },
+        header
+      );
+      client.current?.subscribe(
+        `/topic/games/${id}/dashboard`,
+        (message) => {
+          setDashBoard(JSON.parse(message.body));
+        },
+        header
+      );
+      client.current?.subscribe(
+        `/topic/games/${id}/kill-log`,
+        (message) => {
+          setLogs((prevLogs) => {
+            const newLogs = [JSON.parse(message.body), ...prevLogs];
+            return newLogs;
+          });
+        },
+        header
+      );
+      client.current?.subscribe(
+        `/topic/games/${id}/rank`,
+        (message) => {
+          setRanks([...JSON.parse(message.body).ranks]);
+        },
+        header
+      );
+    });
+  };
+
+  const checkMyResult = (newResults: ResultTypes[]) => {
+    newResults.forEach((result) => {
+      if (userId === result.userId) {
+        setResultData(result);
+        return;
+      }
+    });
+  };
+
+  const checkAlive = (newPlayers: PlayersTypes[]) => {
+    newPlayers.forEach((player) => {
+      if (userId === player.userId && player.stamina === 0) {
+        setGameData({ ...gameData, isAlive: false });
+        return;
+      }
+    });
   };
 
   useEffect(() => {
     connectHandler();
     return () => {
-      clientRef.current?.disconnect(() => {}, header);
+      client.current?.disconnect(() => {}, header);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     if (countdown === 0) {
@@ -50,24 +140,21 @@ export default function GamePage() {
 
   return (
     <Background>
-      {clientRef.current && (
+      {client.current && (
         <FlexLayout gap='4rem'>
           <FlexLayout $isCol gap='2rem'>
-            <GameHeader client={clientRef.current} />
+            <GameHeader dashBoard={dashBoard} />
             {state === 'WAIT' ? (
-              <GameWait countdown={countdown} client={clientRef.current} />
+              <GameWait countdown={countdown} logs={logs} />
             ) : state === 'PLAY' ? (
-              <GamePlay
-                client={clientRef.current}
-                changeToResult={() => setState('RESULT')}
-              />
+              <GamePlay client={client.current} logs={logs} players={players} />
             ) : (
-              <GameResult isWinner changeState={() => setState('PLAY')} />
+              <GameResult changeState={() => setState('PLAY')} />
             )}
           </FlexLayout>
           <FlexLayout $isCol gap='1.2rem'>
             <ChatBox mode='ROOM' isShort text={`방 채팅`} />
-            <RankBox client={clientRef.current} />
+            <RankBox ranks={ranks} />
           </FlexLayout>
         </FlexLayout>
       )}
