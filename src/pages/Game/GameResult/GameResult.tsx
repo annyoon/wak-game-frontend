@@ -96,7 +96,6 @@ export default function GameResult({ changeState }: GameResultProps) {
   useEffect(() => {
     if (countdown === 0) {
       if (roundNumber < ROUND_NUMBER) {
-        // setGameData({ ...gameData, roundId: gameData.nextRoundId });
         changeState();
       } else {
         navigate(`/lobby`);

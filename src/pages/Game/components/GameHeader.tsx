@@ -16,6 +16,20 @@ const TextBlock = styled.div`
   gap: 2rem;
 `;
 
+const ImgTextBlock = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+`;
+
+const GhostImg = styled.img.attrs({
+  src: require('../../../assets/img-ghost.png'),
+  alt: '유령',
+})`
+  width: 4rem;
+  height: fit-content;
+`;
+
 type GameHeaderProps = {
   dashBoard: {
     roundNumber: number;
@@ -34,9 +48,12 @@ export default function GameHeader({
       <TextBlock>
         <SmallText>{`현재 방 이름 : ${gameData.roomName} ( ${roundNumber} 라운드 )`}</SmallText>
         <SmallText>{`생존자 수 : ${aliveCount} / ${totalCount} 명`}</SmallText>
-        <SmallText>{`내 상태 : ${
-          gameData.isAlive ? `생존!` : `죽음`
-        }`}</SmallText>
+        <ImgTextBlock>
+          <SmallText>{`내 상태 : ${
+            gameData.isAlive ? `생존` : `죽음`
+          }`}</SmallText>
+          {!gameData.isAlive && <GhostImg />}
+        </ImgTextBlock>
       </TextBlock>
     </HeaderBlock>
   );

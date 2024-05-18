@@ -20,7 +20,8 @@ const KillLogBlock = styled.div<{ $isWaiting?: boolean }>`
 
 const TextBlock = styled(FlexLayout)`
   justify-content: space-evenly;
-  margin-bottom: 0.4rem;
+  margin-top: 0.2rem;
+  margin-bottom: 0.2rem;
 `;
 
 const Text = styled.div`
@@ -45,7 +46,7 @@ export default function KillLog({ isWaiting, logs }: KillLogProps) {
             return (
               <TextBlock key={index}>
                 <Text color={value.color}>{value.userNickname}</Text>
-                <Text>{`⌐╦╦═─`}</Text>
+                <Text>{`⌐╦═╦═─ - -`}</Text>
                 <Text color={value.victimColor}>{value.victimNickName}</Text>
                 <Text>{`X`}</Text>
               </TextBlock>
