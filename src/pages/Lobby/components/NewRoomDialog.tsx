@@ -80,7 +80,9 @@ export default function NewRoomDialog({ closeDialog }: NewRoomDialogProps) {
   const handleClick = async () => {
     const updatedWarn = { ...warn };
     updatedWarn.warnTitle = info.title.length < 2 || info.title.length > 12;
-    updatedWarn.warnPlayers = !/^\d{1,2}$|^100$/.test(info.players.toString());
+    updatedWarn.warnPlayers = !/^(?:[2-9]|[1-9][0-9]|100)$/.test(
+      info.players.toString()
+    );
     updatedWarn.warnPassword = info.isSecret && !/^\d{4}$/.test(info.password);
 
     setWarn(updatedWarn);

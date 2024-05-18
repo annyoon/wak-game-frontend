@@ -16,7 +16,10 @@ type ButtonGroupProps = {
   isHost: boolean;
   canStart: boolean;
   usersNumber: number;
-  openDialog: () => void;
+  openDialog: {
+    startCheck: () => void;
+    gameRules: () => void;
+  };
 };
 
 export default function ButtonGroup({
@@ -29,6 +32,10 @@ export default function ButtonGroup({
   const { id } = useParams();
   const { roomData } = useRoomStore();
   const { gameData, setGameData } = useGameStore();
+
+  const handleRules = () => {
+    openDialog.gameRules();
+  };
 
   const handleStart = async () => {
     if (canStart) {
@@ -51,7 +58,7 @@ export default function ButtonGroup({
         navigate(`/error`);
       }
     } else {
-      openDialog();
+      openDialog.startCheck();
     }
   };
 
@@ -68,7 +75,7 @@ export default function ButtonGroup({
 
   return (
     <Layout gap='2rem'>
-      <RoundButton color='purple' label={`게임 방법`} />
+      <RoundButton color='purple' label={`게임 방법`} onClick={handleRules} />
       {isHost && (
         <RoundButton color='blue' label={`게임 시작`} onClick={handleStart} />
       )}

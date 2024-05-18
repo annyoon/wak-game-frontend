@@ -31,7 +31,9 @@ export default function PlayerNickname({
   return (
     <FlexLayout $isCol={isCol} gap={isCol ? '0.2rem' : '1rem'}>
       <NicknameBox color={color} {...props} />
-      {isCol && !isHidden ? (
+      {isHidden ? (
+        <></>
+      ) : isCol ? (
         <TinyText color={color}>{nickname}</TinyText>
       ) : (
         <SmallText color={color}>{nickname}</SmallText>

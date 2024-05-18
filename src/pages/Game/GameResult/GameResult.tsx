@@ -29,6 +29,17 @@ export default function GameResult({ changeState }: GameResultProps) {
     winnerColor,
   } = useFinalResultStore().finalResultData;
   const [countdown, setCountdown] = useState(30);
+  const [warn, setWarn] = useState(false);
+
+  const handleChange = (e: { target: { name: string; value: string } }) => {
+    const { name, value } = e.target;
+    if (value.length > 15) {
+      setWarn(true);
+    } else {
+      setWarn(false);
+      // set data { ...data, [name]: value }
+    }
+  };
 
   const ResultText = ({
     title,
@@ -60,8 +71,13 @@ export default function GameResult({ changeState }: GameResultProps) {
             <FlexLayout $isCol gap='1rem'>
               <SmallText color='black'>{`${
                 roundNumber + 1
-              } 라운드 도발 멘트 입력`}</SmallText>
-              <Input name='winnerComment' width='60rem' />
+              } 라운드 도발 멘트`}</SmallText>
+              <FlexLayout>
+                <Input name={``} width='38rem' onChange={handleChange} />
+                <SmallText
+                  color={warn ? '#e84b4b' : 'black'}
+                >{`(15자 이내)`}</SmallText>
+              </FlexLayout>
             </FlexLayout>
           ) : (
             <FlexLayout gap='1.2rem'>

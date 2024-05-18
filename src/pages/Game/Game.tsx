@@ -46,8 +46,8 @@ export default function GamePage() {
   const [ranks, setRanks] = useState<RankPlayersTypes[]>([]);
   const [dashBoard, setDashBoard] = useState({
     roundNumber: 1,
-    totalCount: gameData.playersNumber,
-    aliveCount: gameData.playersNumber,
+    totalCount: 0,
+    aliveCount: 0,
   });
 
   const connectHandler = () => {
@@ -61,7 +61,9 @@ export default function GamePage() {
         `/topic/games/${id}/battle-field`,
         (message) => {
           const data = JSON.parse(message.body);
+          console.log(data);
           if (data.isFinished) {
+            console.log('끝났다');
             setGameData({
               ...gameData,
               roundNumber: data.roundNumber,
@@ -71,7 +73,6 @@ export default function GamePage() {
             data.roundNumber === 3 && checkMyFinalResult(data.finalResults);
             setState('RESULT');
           } else {
-            console.log(data.players);
             setPlayers(data.players);
             checkAlive(data.players);
           }
@@ -131,6 +132,17 @@ export default function GamePage() {
       }
     });
   };
+
+  useEffect(() => {
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
+      event.returnValue = '';
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []);
 
   useEffect(() => {
     connectHandler();

@@ -46,7 +46,7 @@ export default function KillLog({ isWaiting, logs }: KillLogProps) {
             return (
               <TextBlock key={index}>
                 <Text color={value.color}>{value.userNickname}</Text>
-                <Text>{`⌐╦═╦═─ - -`}</Text>
+                <Text>{`⌐╦═╦═─`}</Text>
                 <Text color={value.victimColor}>{value.victimNickName}</Text>
                 <Text>{`X`}</Text>
               </TextBlock>

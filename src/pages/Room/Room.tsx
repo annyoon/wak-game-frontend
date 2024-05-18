@@ -18,6 +18,7 @@ import PlayerList from './components/PlayerList';
 import RoomSetting from './components/RoomSetting';
 import ButtonGroup from './components/ButtonGroup';
 import StartCheckDialog from './components/StartCheckDialog';
+import GameRulesDialog from './components/GameRulesDialog';
 
 export default function RoomPage() {
   const navigate = useNavigate();
@@ -30,8 +31,11 @@ export default function RoomPage() {
   const { userData, setUserData } = useUserStore();
   const { roomData, setRoomData } = useRoomStore();
   const { gameData, setGameData } = useGameStore();
-  const [isOpen, setIsOpen] = useState(false);
-
+  const [isOpen, setIsOpen] = useState({
+    startCheck: false,
+    gameRules: false,
+  });
+  const [gameInfo, setGameInfo] = useState({ roundId: -1, showNickname: true });
   const [playInfo, setPlayInfo] = useState<RoomPlayTypes | null>(null);
   const clientRef = useRef<CompatClient | null>(null);
 
@@ -46,16 +50,8 @@ export default function RoomPage() {
             // clear session
             navigate(`/lobby`);
           } else if ('roundId' in JSON.parse(message.body)) {
-            const { roundId, showNickname } = JSON.parse(message.body);
-            if (!roomData.isHost) {
-              setGameData({
-                ...gameData,
-                roundId: roundId,
-                roomName: roomData.roomName,
-                playersNumber: playInfo?.users.length || 0,
-                showNickname: showNickname,
-              });
-            }
+            setGameInfo(JSON.parse(message.body));
+            console.log(JSON.parse(message.body));
           } else {
             setPlayInfo(JSON.parse(message.body));
           }
@@ -76,6 +72,23 @@ export default function RoomPage() {
       navigate(`/error`);
     }
   };
+
+  useEffect(() => {
+    if (gameInfo.roundId !== -1) {
+      if (!roomData.isHost) {
+        setGameData({
+          ...gameData,
+          roundId: gameInfo.roundId,
+          roomName: roomData.roomName,
+          playersNumber: playInfo?.users.length || 0,
+          showNickname: gameInfo.showNickname,
+        });
+      }
+      navigate(`/game/${id}`);
+    }
+    // navigate(`/game/${id}`, { replace: true });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [gameInfo]);
 
   useEffect(() => {
     connectHandler();
@@ -117,7 +130,10 @@ export default function RoomPage() {
               isHost={roomData.isHost}
               canStart={checkStart()}
               usersNumber={playInfo?.users.length || 0}
-              openDialog={() => setIsOpen(true)}
+              openDialog={{
+                startCheck: () => setIsOpen({ ...isOpen, startCheck: true }),
+                gameRules: () => setIsOpen({ ...isOpen, gameRules: true }),
+              }}
             />
           </FlexLayout>
           <div>
@@ -125,7 +141,16 @@ export default function RoomPage() {
           </div>
         </FlexLayout>
       </Background>
-      {isOpen && <StartCheckDialog closeDialog={() => setIsOpen(false)} />}
+      {isOpen.startCheck && (
+        <StartCheckDialog
+          closeDialog={() => setIsOpen({ ...isOpen, startCheck: false })}
+        />
+      )}
+      {isOpen.gameRules && (
+        <GameRulesDialog
+          closeDialog={() => setIsOpen({ ...isOpen, gameRules: false })}
+        />
+      )}
     </>
   );
 }
