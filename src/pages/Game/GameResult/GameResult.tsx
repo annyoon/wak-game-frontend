@@ -28,6 +28,7 @@ export default function GameResult({ client, changeState }: GameResultProps) {
   };
   const { id } = useParams();
   const { userId } = useUserStore().userData;
+  const { gameData, setGameData } = useGameStore();
   const { roundNumber, roundId } = useGameStore().gameData;
   const { killCount, rank, playTime, aliveTime, victim, victimColor } =
     useResultStore().resultData;
@@ -66,6 +67,7 @@ export default function GameResult({ client, changeState }: GameResultProps) {
     if (countdown === 0) {
       if (roundNumber < ROUND_NUMBER) {
         rank === 1 && sendMention();
+        setGameData({ ...gameData, roundNumber: roundNumber + 1 });
         changeState();
       } else {
         navigate(`/lobby`);

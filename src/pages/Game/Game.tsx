@@ -67,8 +67,9 @@ export default function GamePage() {
         (message) => {
           const data = JSON.parse(message.body);
           console.log(data);
+
           if (data.isFinished) {
-            console.log('끝났다');
+            console.log('finised');
             setGameData({
               ...gameData,
               roundNumber: data.roundNumber,
