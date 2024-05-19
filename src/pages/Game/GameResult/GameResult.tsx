@@ -56,7 +56,7 @@ export default function GameResult({ client, changeState }: GameResultProps) {
   const sendMention = () => {
     const message = JSON.stringify({
       userId: userId,
-      roundId: roundId,
+      roundId: gameData.nextRoundId,
       roomId: id,
       mention: mention,
     });
@@ -67,7 +67,12 @@ export default function GameResult({ client, changeState }: GameResultProps) {
     if (countdown === 0) {
       if (roundNumber < ROUND_NUMBER) {
         rank === 1 && sendMention();
-        setGameData({ ...gameData, roundNumber: roundNumber + 1 });
+        const next = gameData.nextRoundId;
+        setGameData({
+          ...gameData,
+          roundId: next,
+          roundNumber: roundNumber + 1,
+        });
         changeState();
       } else {
         navigate(`/lobby`);
