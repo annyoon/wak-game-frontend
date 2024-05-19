@@ -15,7 +15,7 @@ export default function StartPage() {
 
   useEffect(() => {
     if (token) {
-      navigate(`/lobby`);
+      navigate('/lobby', { replace: true });
     }
   }, [token, navigate]);
 
