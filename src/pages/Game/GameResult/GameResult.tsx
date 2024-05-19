@@ -29,7 +29,7 @@ export default function GameResult({ client, changeState }: GameResultProps) {
   const { id } = useParams();
   const { userId } = useUserStore().userData;
   const { gameData, setGameData } = useGameStore();
-  const { roundNumber, roundId } = useGameStore().gameData;
+  const { roundNumber, roundId, nextRoundId } = useGameStore().gameData;
   const { killCount, rank, playTime, aliveTime, victim, victimColor } =
     useResultStore().resultData;
   const {
@@ -56,7 +56,8 @@ export default function GameResult({ client, changeState }: GameResultProps) {
   const sendMention = () => {
     const message = JSON.stringify({
       userId: userId,
-      roundId: gameData.nextRoundId,
+      roundId: roundId,
+      nextRoundId: nextRoundId,
       roomId: id,
       mention: mention,
     });
@@ -67,7 +68,7 @@ export default function GameResult({ client, changeState }: GameResultProps) {
     if (countdown === 0) {
       if (roundNumber < ROUND_NUMBER) {
         rank === 1 && sendMention();
-        const next = gameData.nextRoundId;
+        const next = nextRoundId;
         setGameData({
           ...gameData,
           roundId: next,
