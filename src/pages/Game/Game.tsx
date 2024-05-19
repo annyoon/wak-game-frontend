@@ -44,6 +44,11 @@ export default function GamePage() {
   const [players, setPlayers] = useState<PlayersTypes[]>([]);
   const [logs, setLogs] = useState<KillLogPlayersTypes[]>([]);
   const [ranks, setRanks] = useState<RankPlayersTypes[]>([]);
+  const [comment, setComment] = useState({
+    sender: '',
+    color: '',
+    mention: '',
+  });
   const [dashBoard, setDashBoard] = useState({
     roundNumber: 1,
     totalCount: 0,
@@ -82,6 +87,8 @@ export default function GamePage() {
       client.current?.subscribe(
         `/topic/games/${id}/dashboard`,
         (message) => {
+          console.log('대시보드');
+          console.log(JSON.parse(message.body));
           setDashBoard(JSON.parse(message.body));
         },
         header
@@ -89,6 +96,8 @@ export default function GamePage() {
       client.current?.subscribe(
         `/topic/games/${id}/kill-log`,
         (message) => {
+          console.log('킬로그');
+          console.log(JSON.parse(message.body));
           setLogs((prevLogs) => {
             const newLogs = [JSON.parse(message.body), ...prevLogs];
             return newLogs;
@@ -99,7 +108,18 @@ export default function GamePage() {
       client.current?.subscribe(
         `/topic/games/${id}/rank`,
         (message) => {
+          console.log('랭킹');
+          console.log(JSON.parse(message.body));
           setRanks([...JSON.parse(message.body).ranks]);
+        },
+        header
+      );
+      client.current?.subscribe(
+        `/topic/games/${id}/mention`,
+        (message) => {
+          console.log('멘트');
+          console.log(JSON.parse(message.body));
+          setComment(JSON.parse(message.body));
         },
         header
       );
@@ -170,11 +190,19 @@ export default function GamePage() {
           <FlexLayout $isCol gap='2rem'>
             <GameHeader dashBoard={dashBoard} />
             {state === 'WAIT' ? (
-              <GameWait countdown={countdown} logs={logs} />
+              <GameWait countdown={countdown} logs={logs} comment={comment} />
             ) : state === 'PLAY' ? (
-              <GamePlay client={client.current} logs={logs} players={players} />
+              <GamePlay
+                client={client.current}
+                logs={logs}
+                players={players}
+                comment={comment}
+              />
             ) : (
-              <GameResult changeState={() => setState('PLAY')} />
+              <GameResult
+                client={client.current}
+                changeState={() => setState('PLAY')}
+              />
             )}
           </FlexLayout>
           <FlexLayout $isCol gap='1.2rem'>
