@@ -1,46 +1,131 @@
-# Getting Started with Create React App
+# WAK Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+> 대규모 선착순 웹 게임 🔫
 
-## Available Scripts
+![main](https://github.com/annyoon/wak-game-frontend/assets/79207743/1b4c68a8-21f1-41fb-b7c8-d980ed1718e4)
 
-In the project directory, you can run:
+<br/>
 
-### `yarn start`
+## 서비스 개요
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### 서비스 이름
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+WAK Game (Win Alive with Clicks)
 
-### `yarn test`
+### 프로젝트 기간
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2024.04.09 - 2024.05.19 (6주)
 
-### `yarn build`
+> **기획 및 설계** : 2024.04.09 - 2024.04.19 (2주)
+>
+> **기능 구현** : 2024.04.22 - 2024.05.19 (4주)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 프로젝트 멤버
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+곽민우, 김라연, 김이현, 김한슬, 윤서안, 조형준(👑)
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 배포 사이트
 
-### `yarn eject`
+[wakgame.com](https://wakgame.com/)
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+<br/>
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## 서비스 소개
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+WAK Game은 선착순 웹 게임 서비스로 **많은 인원**이 매우 **간단한 규칙**으로 참여할 수 있다는 것이 특징입니다!
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### 기획 의도
 
-## Learn More
+인플루언서 또는 어떤 개인이 추첨 이벤트를 진행하려고 할 때 인터넷 방송 플랫폼이나 카카오톡에서 제공하는 기능을 주로 사용합니다. 하지만 이는 단순히 랜덤 또는 선착순으로 뽑히는 방식이기 때문에 재미 요소가 부족하다고 생각했습니다.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+따라서 인플루언서의 시청자들, 또는 개개인이 **능동적으로 재미있게 참여할 수 있는 추첨 이벤트 서비스**를 기획하고자 했고, 여기서 새로운 게임을 통한 방법을 생각해냈습니다.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 게임 방법
+
+1. 게임이 시작되면 참가한 플레이어들의 이름과 도트가 화면에 랜덤으로 보이게 됩니다.
+    - '닉네임 가리기' 모드를 선택할 경우 플레이어 이름이 표시되지 않으며 상대를 특정할 수 없습니다.
+
+2. 마우스로 플레이어의 도트를 클릭하여 상대를 제거할 수 있습니다.
+
+3. 플레이어 한 명이 남으면 라운드가 종료되며 게임은 총 3라운드로 진행됩니다.
+
+4. 상대를 가장 많이 제거한 플레이어가 우승합니다.
+
+### 기능
+
+- 별도의 **회원가입 없이 닉네임을 입력**하여 로그인할 수 있습니다.
+
+- 닉네임마다 랜덤으로 고유한 색깔을 부여받고 이는 화면에 계속 표시됩니다.
+
+- 로비, 대기실, 게임 화면에서 **채팅**을 할 수 있습니다.
+
+- 로비 화면에서 생성된 방들을 확인하고 입장할 수 있습니다.
+
+- 호스트는 방 제목, 인원, 비밀 방 여부를 입력하고 방을 생성할 수 있습니다.
+
+- 방에 입장하면 대기실 화면으로 이동하며 **참가한 플레이어 목록을 확인**할 수 있습니다.
+
+- 호스트는 대기실에서 **닉네임 가리기 모드** 여부, 1라운드의 **도발 멘트**를 입력할 수 있습니다.
+
+- 도발 멘트는 게임이 진행되는 동안 상단에 보여지며, 1라운드를 제외하고 각 라운드의 우승자가 입력할 수 있습니다.
+
+- 대기실에서 게임 방법을 확인할 수 있고 호스트가 게임 시작 버튼을 누르면 5초의 카운트다운 후 게임이 시작됩니다.
+
+- 게임이 진행되면 **킬로그**에서 누가 누구를 공격했는지 실시간으로 확인할 수 있습니다.
+
+- **실시간 랭킹**을 제공하여 누가 순위권에 오르는지 바로 확인할 수 있습니다.
+
+- 하나의 라운드가 종료되면 게임 시간, 생존 시간, 라운드 랭킹, 제거한 플레이어 수, 나를 제거한 플레이어의 닉네임 등의 **결과를 확인**할 수 있습니다.
+
+- 결과 확인 화면에서 30초의 **카운트다운 후 다음 라운드가 자동으로 시작**됩니다.
+
+- 게임이 종료되면 **최종 결과를 확인**할 수 있습니다.
+
+<br/>
+
+## 스크린샷
+
+<br/>
+
+## 멤버 소개
+
+### 프로필
+
+| [![윤서안](https://github.com/annyoon.png)](https://github.com/annyoon) | [![조형준](https://github.com/ryuu9505.png)](https://github.com/ryuu9505) | [![곽민우](https://github.com/minwoo-kwak.png)](https://github.com/minwoo-kwak) | [![김라연](https://github.com/fkdusrh.png)](https://github.com/fkdusrh) | [![김이현](https://github.com/olnuyh.png)](https://github.com/olnuyh) | [![김한슬](https://github.com/slcloe.png)](https://github.com/slcloe) |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| 윤서안 <br/> FE | 조형준 <br/> 팀장 / BE | 곽민우 <br/> BE | 김라연 <br/> BE | 김이현 <br/> BE | 김한슬 <br/> BE |
+
+### 역할
+
+| 주요 기능 | 설명 | FE 담당 | BE 담당 | INFRA 담당
+| :---- | :------------ | :-------- | :-------- | :-------- |
+| 인증 | JWT 기반 인증 | 🐹윤서안 | 🦝김라연 <br/> 🐱김한슬 | 🐵곽민우 |
+| 게임 | 웹소켓 기반 실시간 게임 | 🐹윤서안 | 🦝김라연 <br/> 🐱김한슬 | 🐵곽민우 |
+| 채팅 | Redis Pub/Sub 기반 채팅 | 🐹윤서안 | 🐷조형준 <br/> 🐰김이현 | 🐵곽민우 |
+
+<br/>
+
+## 기술 스택
+
+| 구분 | 기술 |
+| :-- | :-------- |
+| Frontend | ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=for-the-badge&logo=typescript&logoColor=white) ![React](https://img.shields.io/badge/react-%2320232a.svg?style=for-the-badge&logo=react&logoColor=%2361DAFB) ![Styled Components](https://img.shields.io/badge/styled--components-DB7093?style=for-the-badge&logo=styled-components&logoColor=white)
+| Backend | ![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white) ![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white) ![Hibernate](https://img.shields.io/badge/Hibernate-59666C?style=for-the-badge&logo=Hibernate&logoColor=white) ![MariaDB](https://img.shields.io/badge/MariaDB-003545?style=for-the-badge&logo=mariadb&logoColor=white) ![Redis](https://img.shields.io/badge/redis-%23DD0031.svg?style=for-the-badge&logo=redis&logoColor=white) ![MongoDB](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+| Infra | ![AWS](https://img.shields.io/badge/AWS-%23FF9900.svg?style=for-the-badge&logo=amazon-aws&logoColor=white) ![Nginx](https://img.shields.io/badge/nginx-%23009639.svg?style=for-the-badge&logo=nginx&logoColor=white) ![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white) ![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white) ![Ubuntu](https://img.shields.io/badge/Ubuntu-E95420?style=for-the-badge&logo=ubuntu&logoColor=white) ![Jenkins](https://img.shields.io/badge/jenkins-%232C5263.svg?style=for-the-badge&logo=jenkins&logoColor=white)
+| Mangement Tool | ![Jira](https://img.shields.io/badge/jira-%230A0FFF.svg?style=for-the-badge&logo=jira&logoColor=white) ![GitLab](https://img.shields.io/badge/gitlab-%23181717.svg?style=for-the-badge&logo=gitlab&logoColor=white) ![Notion](https://img.shields.io/badge/Notion-%23000000.svg?style=for-the-badge&logo=notion&logoColor=white) ![Figma](https://img.shields.io/badge/figma-%23F24E1E.svg?style=for-the-badge&logo=figma&logoColor=white)
+
+<br/>
+
+## 산출물
+
+### 시스템 아키텍쳐
+
+![architecture](https://github.com/annyoon/wak-game-frontend/assets/79207743/de845a10-47ff-4755-85de-c73a9cbe10e9)
+
+### 외부 문서
+
+- [프로젝트 관리 페이지 | Notion](https://ritzy-doom-b84.notion.site/2024-04-09-ing-1666b82f3b1743dea5bdd5cadb70d23a?pvs=4)
+
+- [화면 설계 | Figma](https://www.figma.com/design/n4P98ORpCAIpDXfny4mWdt/Untitled?node-id=0-1&t=EKuxFhTQti5T6gin-1)
+
+<br/>
