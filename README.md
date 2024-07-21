@@ -1,6 +1,6 @@
 # WAK Game
 
-> 대규모 선착순 웹 게임 🔫
+> 실시간 대규모 선착순 웹 게임 🔫
 
 ![main](https://github.com/annyoon/wak-game-frontend/assets/79207743/1b4c68a8-21f1-41fb-b7c8-d980ed1718e4)
 
@@ -14,7 +14,7 @@
 
 ### 프로젝트 멤버
 
-조형준(👑), 곽민우, 김라연, 김이현, 김한슬, 윤서안
+윤서안(FE), 곽민우(BE), 김라연(BE), 김이현(BE), 김한슬(BE), 조형준(BE)
 
 ### 프로젝트 기간
 
@@ -85,6 +85,30 @@ WAK Game은 선착순 웹 게임 서비스로 **많은 인원**이 매우 **간�
 
 ## 🌈 스크린샷
 
+|![시작](https://github.com/user-attachments/assets/36a41c7e-9c5e-43d8-9012-e8a658de2392)|![전체채팅](https://github.com/user-attachments/assets/69e7e915-be06-44eb-b554-e1c8e0b0d995)|
+|:---:|:---:|
+| 시작 화면 및 닉네임 입력 | 게임 로비 및 전체 채팅 |
+
+|![방만들기](https://github.com/user-attachments/assets/501d8ade-ae55-4df0-8a27-b498459a76b1)|![게임방법](https://github.com/user-attachments/assets/f13cc059-f943-4e74-9a83-80605f20c545)|
+|:---:|:---:|
+| 방 만들기 | 방(대기실)에서 게임 방법 확인 |
+
+|![방입장](https://github.com/user-attachments/assets/1f89b42a-4140-4e92-853a-1ab7e9fdced5)|![방입장_참여자시점](https://github.com/user-attachments/assets/ba833492-71cc-440c-bb5c-57223eaf7790)|
+|:---:|:---:|
+| 방 입장(방장 시점) | 방 입장(참가자 시점) |
+
+|![방채팅](https://github.com/user-attachments/assets/e8afcfce-b444-429b-9748-14a3d1cfb22f)|![게임시작](https://github.com/user-attachments/assets/780239c0-950f-4fab-a0a8-d1198f7fa44c)|
+|:---:|:---:|
+| 방 채팅 | 게임 시작 |
+
+|![게임진행](https://github.com/user-attachments/assets/53c4b1f4-7d56-45d9-b183-20a9b9762bf8)|![게임진행_죽음](https://github.com/user-attachments/assets/e224c367-ad3f-4143-b27b-19ac307e39ba)|
+|:---:|:---:|
+| 게임 진행 화면(생존) | 게임 진행 화면(죽음) |
+
+|![라운드결과](https://github.com/user-attachments/assets/350051d6-37bb-4907-89fc-287efa46f4ef)|![닉네임가리기모드](https://github.com/user-attachments/assets/cc30b4c0-3b5b-4a04-b86c-4ba127a830f0)|
+|:---:|:---:|
+| 라운드 결과 화면 | 닉네임 가리기 모드 |
+
 <br/>
 
 ## 🌞 멤버 소개
@@ -93,7 +117,7 @@ WAK Game은 선착순 웹 게임 서비스로 **많은 인원**이 매우 **간�
 
 | [![윤서안](https://github.com/annyoon.png)](https://github.com/annyoon) | [![조형준](https://github.com/ryuu9505.png)](https://github.com/ryuu9505) | [![곽민우](https://github.com/minwoo-kwak.png)](https://github.com/minwoo-kwak) | [![김라연](https://github.com/fkdusrh.png)](https://github.com/fkdusrh) | [![김이현](https://github.com/olnuyh.png)](https://github.com/olnuyh) | [![김한슬](https://github.com/slcloe.png)](https://github.com/slcloe) |
 |:---:|:---:|:---:|:---:|:---:|:---:|
-| 윤서안 <br/> FE | 조형준 <br/> 팀장 / BE | 곽민우 <br/> BE | 김라연 <br/> BE | 김이현 <br/> BE | 김한슬 <br/> BE |
+| 윤서안 <br/> Front-end | 조형준 <br/> 팀장 / Back-end | 곽민우 <br/> Back-end | 김라연 <br/> Back-end | 김이현 <br/> Back-end | 김한슬 <br/> Back-end |
 
 ### 역할
 
